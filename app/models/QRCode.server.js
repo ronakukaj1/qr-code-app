@@ -147,3 +147,58 @@ async function transformMetaobject(metaobject, shop){
         url.searchParams.set("shop", shop);
         return QRCode.toDataURL(url.href);
       }
+
+      export function getDestinationUrl(qrCode, shop) {
+        if (qrCode.destination === "product") {
+          return `https://${shop}/products/${qrCode.productHandle}?variant=${qrCode.productVariantLegacyId}`;
+        }
+      
+        invariant(qrCode.productVariantLegacyId, "Unrecognised product variant ID");
+      
+        return `https://${shop}/cart/${qrCode.productVariantLegacyId}:1`;
+      }
+
+      export function getDestinationUrl(qrCode, shop) {
+        if (qrCode.destination === "product") {
+          return `https://${shop}/products/${qrCode.productHandle}?variant=${qrCode.productVariantLegacyId}`;
+        }
+      
+        invariant(qrCode.productVariantLegacyId, "Unrecognised product variant ID");
+      
+        return `https://${shop}/cart/${qrCode.productVariantLegacyId}:1`;
+      }
+
+      export async function saveQRCode(handle, data, graphql) {
+        const response = await graphql(
+          `
+            mutation UpsertQRCode($handle: MetaobjectHandleInput!, $metaobject: MetaobjectUpsertInput!) {
+              metaobjectUpsert(handle: $handle, metaobject: $metaobject) {
+                metaobject { id handle }
+                userErrors { field message }
+              }
+            }
+          `,
+          {
+            variables: {
+              handle: { type: METAOBJECT_TYPE, handle },
+              metaobject: {
+                fields: [
+                  { key: "title", value: data.title },
+                  { key: "product", value: data.productId },
+                  { key: "product_variant", value: data.productVariantId },
+                  { key: "destination", value: data.destination },
+                ],
+              },
+            },
+          },
+        );
+      
+        const { data: responseData } = await response.json();
+        const { metaobjectUpsert } = responseData;
+      
+        if (metaobjectUpsert.userErrors.length) {
+          throw new Error(metaobjectUpsert.userErrors[0].message);
+        }
+      
+        return metaobjectUpsert.metaobject;
+      }
