@@ -221,7 +221,7 @@ async function transformMetaobject(metaobject, shop){
       }
 
       export async function incrementQRCodeScans(id, currentScans, graphql) {
-        await graphql(
+        const response = await graphql(
           `
             mutation IncrementScans($id: ID!, $metaobject: MetaobjectUpdateInput!) {
               metaobjectUpdate(id: $id, metaobject: $metaobject) {
@@ -239,6 +239,12 @@ async function transformMetaobject(metaobject, shop){
             },
           },
         );
+
+        const { data } = await response.json();
+
+        if (data.metaobjectUpdate.userErrors.length) {
+          throw new Error(data.metaobjectUpdate.userErrors[0].message);
+        }
       }
       function slugify(text) {
         return text

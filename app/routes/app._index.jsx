@@ -1,4 +1,4 @@
-import { useLoaderData } from "react-router";
+import { useLoaderData, useNavigate } from "react-router";
 import { boundary } from "@shopify/shopify-app-react-router/server";
 
 import { authenticate } from "../shopify.server";
@@ -13,7 +13,7 @@ export async function loader({ request }) {
   };
 }
 
-const EmptyQRCodeState = () => (
+const EmptyQRCodeState = ({ onCreate }) => (
   <s-section accessibilityLabel="Empty state section">
     <s-grid gap="base" justifyItems="center" paddingBlock="large-400">
       <s-box maxInlineSize="200px" maxBlockSize="200px">
@@ -35,7 +35,7 @@ const EmptyQRCodeState = () => (
           paddingBlockEnd="none"
           direction="inline"
         >
-          <s-button href="/app/qrcodes/new" variant="primary">
+          <s-button variant="primary" onClick={onCreate}>
             Create QR code
           </s-button>
         </s-stack>
@@ -108,14 +108,16 @@ const QRTableRow = ({ qrCode }) => (
 
 export default function Index() {
   const { qrCodes } = useLoaderData();
+  const navigate = useNavigate();
+  const createQRCode = () => navigate("/app/qrcodes/new");
 
   return (
     <s-page heading="QR codes">
-      <s-link slot="secondary-actions" href="/app/qrcodes/new">
+      <s-button slot="secondary-actions" onClick={createQRCode}>
         Create QR code
-      </s-link>
+      </s-button>
       {qrCodes.length === 0 ? (
-        <EmptyQRCodeState />
+        <EmptyQRCodeState onCreate={createQRCode} />
       ) : (
         <QRTable qrCodes={qrCodes} />
       )}
