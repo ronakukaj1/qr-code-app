@@ -1,5 +1,3 @@
-import QRCode from "qrcode";
-import invariant from "tiny-invariant";
 
 const METAOBJECT_TYPE = "$app:qrcode";
 
@@ -141,7 +139,6 @@ async function transformMetaobject(metaobject, shop){
       return qrCode;
     }
 
-
     export async function getQRCodeImage(handle, shop) {
         const url = new URL(
           `/qrcodes/${handle}/scan`,
@@ -149,123 +146,4 @@ async function transformMetaobject(metaobject, shop){
         );
         url.searchParams.set("shop", shop);
         return QRCode.toDataURL(url.href);
-      }
-      
-      export function getDestinationUrl(qrCode, shop) {
-        if (qrCode.destination === "product") {
-          return `https://${shop}/products/${qrCode.productHandle}?variant=${qrCode.productVariantLegacyId}`;
-        }
-      
-        invariant(qrCode.productVariantLegacyId, "Unrecognised product variant ID");
-      
-        return `https://${shop}/cart/${qrCode.productVariantLegacyId}:1`;
-      }
-      
-      export async function saveQRCode(handle, data, graphql) {
-        const response = await graphql(
-          `
-            mutation UpsertQRCode($handle: MetaobjectHandleInput!, $metaobject: MetaobjectUpsertInput!) {
-              metaobjectUpsert(handle: $handle, metaobject: $metaobject) {
-                metaobject { id handle }
-                userErrors { field message }
-              }
-            }
-          `,
-          {
-            variables: {
-              handle: { type: METAOBJECT_TYPE, handle },
-              metaobject: {
-                fields: [
-                  { key: "title", value: data.title },
-                  { key: "product", value: data.productId },
-                  { key: "product_variant", value: data.productVariantId },
-                  { key: "destination", value: data.destination },
-                ],
-              },
-            },
-          },
-        );
-      
-        const { data: responseData } = await response.json();
-        const { metaobjectUpsert } = responseData;
-      
-        if (metaobjectUpsert.userErrors.length) {
-          throw new Error(metaobjectUpsert.userErrors[0].message);
-        }
-      
-        return metaobjectUpsert.metaobject;
-      }
-      
-      export async function deleteQRCode(id, graphql) {
-        const response = await graphql(
-          `
-            mutation DeleteQRCode($id: ID!) {
-              metaobjectDelete(id: $id) {
-                deletedId
-                userErrors { field message }
-              }
-            }
-          `,
-          {
-            variables: { id },
-          },
-        );
-      
-        const { data } = await response.json();
-      
-        if (data.metaobjectDelete.userErrors.length) {
-          throw new Error(data.metaobjectDelete.userErrors[0].message);
-        }
-      }
-      
-      export async function incrementQRCodeScans(id, currentScans, graphql) {
-        await graphql(
-          `
-            mutation IncrementScans($id: ID!, $metaobject: MetaobjectUpdateInput!) {
-              metaobjectUpdate(id: $id, metaobject: $metaobject) {
-                metaobject { id }
-                userErrors { field message }
-              }
-            }
-          `,
-          {
-            variables: {
-              id,
-              metaobject: {
-                fields: [{ key: "scan_count", value: String(currentScans + 1) }],
-              },
-            },
-          },
-        );
-      }
-      
-      function slugify(text) {
-        return text
-          .toLowerCase()
-          .replace(/[^a-z0-9]+/g, "-")
-          .replace(/(^-|-$)/g, "");
-      }
-      
-      export function generateHandle(title) {
-        return `${slugify(title)}-${Date.now().toString(36)}`;
-      }
-      
-      export function validateQRCode(data) {
-        const errors = {};
-      
-        if (!data.title) {
-          errors.title = "Title is required";
-        }
-      
-        if (!data.productId) {
-          errors.productId = "Product is required";
-        }
-      
-        if (!data.destination) {
-          errors.destination = "Destination is required";
-        }
-      
-        if (Object.keys(errors).length) {
-          return errors;
-        }
       }
