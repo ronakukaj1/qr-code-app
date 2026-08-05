@@ -1,3 +1,5 @@
+import invariant from "tiny-invariant";
+import QRCode from "qrcode";
 
 const METAOBJECT_TYPE = "$app:qrcode";
 
@@ -158,15 +160,7 @@ async function transformMetaobject(metaobject, shop){
         return `https://${shop}/cart/${qrCode.productVariantLegacyId}:1`;
       }
 
-      export function getDestinationUrl(qrCode, shop) {
-        if (qrCode.destination === "product") {
-          return `https://${shop}/products/${qrCode.productHandle}?variant=${qrCode.productVariantLegacyId}`;
-        }
-      
-        invariant(qrCode.productVariantLegacyId, "Unrecognised product variant ID");
-      
-        return `https://${shop}/cart/${qrCode.productVariantLegacyId}:1`;
-      }
+   
 
       export async function saveQRCode(handle, data, graphql) {
         const response = await graphql(
@@ -187,6 +181,7 @@ async function transformMetaobject(metaobject, shop){
                   { key: "product", value: data.productId },
                   { key: "product_variant", value: data.productVariantId },
                   { key: "destination", value: data.destination },
+                  { key: "scan_count", value: "0" }
                 ],
               },
             },
@@ -239,9 +234,39 @@ async function transformMetaobject(metaobject, shop){
             variables: {
               id,
               metaobject: {
-                fields: [{ key: "scans", value: String(currentScans + 1) }],
+                fields: [{ key: "scan_count", value: String(currentScans + 1) }],
               },
             },
           },
         );
+      }
+      function slugify(text) {
+        return text
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/(^-|-$)/g, "");
+      }
+      
+      export function generateHandle(title) {
+        return `${slugify(title)}-${Date.now().toString(36)}`;
+      }
+      
+      export function validateQRCode(data) {
+        const errors = {};
+      
+        if (!data.title) {
+          errors.title = "Title is required";
+        }
+      
+        if (!data.productId) {
+          errors.productId = "Product is required";
+        }
+      
+        if (!data.destination) {
+          errors.destination = "Destination is required";
+        }
+      
+        if (Object.keys(errors).length) {
+          return errors;
+        }
       }
