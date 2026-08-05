@@ -202,3 +202,46 @@ async function transformMetaobject(metaobject, shop){
       
         return metaobjectUpsert.metaobject;
       }
+
+      export async function deleteQRCode(id, graphql) {
+        const response = await graphql(
+          `
+            mutation DeleteQRCode($id: ID!) {
+              metaobjectDelete(id: $id) {
+                deletedId
+                userErrors { field message }
+              }
+            }
+          `,
+          {
+            variables: { id },
+          },
+        );
+      
+        const { data } = await response.json();
+      
+        if (data.metaobjectDelete.userErrors.length) {
+          throw new Error(data.metaobjectDelete.userErrors[0].message);
+        }
+      }
+
+      export async function incrementQRCodeScans(id, currentScans, graphql) {
+        await graphql(
+          `
+            mutation IncrementScans($id: ID!, $metaobject: MetaobjectUpdateInput!) {
+              metaobjectUpdate(id: $id, metaobject: $metaobject) {
+                metaobject { id }
+                userErrors { field message }
+              }
+            }
+          `,
+          {
+            variables: {
+              id,
+              metaobject: {
+                fields: [{ key: "scans", value: String(currentScans + 1) }],
+              },
+            },
+          },
+        );
+      }
