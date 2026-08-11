@@ -1,0 +1,28 @@
+.storefront-qr {
+  display: grid;
+  gap: 0.75rem;
+  justify-items: start;
+  margin: 1.5rem 0;
+  padding: 1rem;
+  border: 1px solid #e1e3e5;
+  border-radius: 12px;
+}
+
+.storefront-qr__title {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.storefront-qr__image {
+  display: block;
+  width: 200px;
+  height: 200px;
+}
+
+.storefront-qr__scans,
+.storefront-qr__help,
+.storefront-qr__message {
+  margin: 0;
+  color: #6d7175;
+  font-size: 0.875rem;
+}

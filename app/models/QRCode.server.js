@@ -1,5 +1,8 @@
 import invariant from "tiny-invariant";
 import QRCode from "qrcode";
+import { redirect } from "react-router";
+
+import { unauthenticated } from "../shopify.server";
 
 const METAOBJECT_TYPE = "$app:qrcode";
 
@@ -113,6 +116,67 @@ export async function getQRCodes (graphql, shop){
 
 }
 
+export async function getQRCodeByProductId(productId, graphql, shop) {
+  const productGid = String(productId).startsWith("gid://")
+    ? String(productId)
+    : `gid://shopify/Product/${productId}`;
+
+  const response = await graphql(
+    `
+      query GetQRCodesForProduct($type: String!) {
+        metaobjects(type: $type, first: 50, sortKey: "updated_at", reverse: true) {
+          nodes {
+            id
+            handle
+            updatedAt
+            title: field(key: "title") { jsonValue }
+            product: field(key: "product") {
+              jsonValue
+              reference {
+                ... on Product {
+                  handle
+                  title
+                  media(first: 1) {
+                    nodes {
+                      preview {
+                        image { url altText }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+            productVariant: field(key: "product_variant") {
+              reference {
+                ... on ProductVariant { id legacyResourceId }
+              }
+            }
+            destination: field(key: "destination") { jsonValue }
+            scans: field(key: "scan_count") { jsonValue }
+          }
+        }
+      }
+    `,
+    {
+      variables: {
+        type: METAOBJECT_TYPE,
+      },
+    },
+  );
+
+  const { data } = await response.json();
+  const metaobjects = data?.metaobjects?.nodes ?? [];
+  const metaobject = metaobjects.find(
+    (node) => node.product?.jsonValue === productGid,
+  );
+
+  if (!metaobject) {
+    return null;
+  }
+
+  return transformMetaobject(metaobject, shop);
+}
+
 async function transformMetaobject(metaobject, shop){
     const product = metaobject.product?.reference;
     const productVariant = metaobject.productVariant?.reference;
@@ -141,13 +205,59 @@ async function transformMetaobject(metaobject, shop){
       return qrCode;
     }
 
-    export async function getQRCodeImage(handle, shop) {
-        const url = new URL(
-          `/qrcodes/${handle}/scan`,
-          process.env.SHOPIFY_APP_URL,
+      export async function getQRCodeImage(handle, shop) {
+        return QRCode.toDataURL(getQRCodeScanUrl(handle, shop));
+      }
+
+      export function getQRCodeScanUrl(handle, shop) {
+        return `https://${shop}/apps/qr-scan/${handle}`;
+      }
+
+      export async function processQRCodeScan(shop, handle) {
+        const { admin } = await unauthenticated.admin(shop);
+
+        const response = await admin.graphql(
+          `
+            query GetQRCodeScan($handle: MetaobjectHandleInput!) {
+              metaobjectByHandle(handle: $handle) {
+                id
+                product: field(key: "product") {
+                  reference {
+                    ... on Product { handle }
+                  }
+                }
+                productVariant: field(key: "product_variant") {
+                  reference {
+                    ... on ProductVariant { legacyResourceId }
+                  }
+                }
+                destination: field(key: "destination") { jsonValue }
+                scans: field(key: "scan_count") { jsonValue }
+              }
+            }
+          `,
+          {
+            variables: {
+              handle: { type: METAOBJECT_TYPE, handle },
+            },
+          },
         );
-        url.searchParams.set("shop", shop);
-        return QRCode.toDataURL(url.href);
+
+        const { data } = await response.json();
+        const metaobject = data?.metaobjectByHandle;
+        invariant(metaobject, "Could not find QR code destination");
+
+        const currentScans = metaobject.scans?.jsonValue ?? 0;
+        await incrementQRCodeScans(metaobject.id, currentScans, admin.graphql);
+
+        const qrCode = {
+          destination: metaobject.destination?.jsonValue,
+          productHandle: metaobject.product?.reference?.handle,
+          productVariantLegacyId:
+            metaobject.productVariant?.reference?.legacyResourceId,
+        };
+
+        return redirect(getDestinationUrl(qrCode, shop));
       }
 
       export function getDestinationUrl(qrCode, shop) {

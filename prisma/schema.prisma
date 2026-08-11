@@ -32,3 +32,19 @@ model Session {
   refreshToken        String?
   refreshTokenExpires DateTime?
 }
+
+model PubSubOrder {
+  id              String   @id @default(cuid())
+  shopifyOrderId  String
+  shop            String
+  topic           String
+  orderName       String?
+  totalPrice      String
+  currency        String
+  financialStatus String?
+  test            Boolean  @default(false)
+  receivedAt      DateTime @default(now())
+
+  @@unique([shopifyOrderId, topic])
+  @@index([shop])
+}

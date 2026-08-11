@@ -1,0 +1,56 @@
+{% assign qr_product = block.settings.product | default: product %}
+
+<div
+  class="storefront-qr"
+  {{ block.shopify_attributes }}
+  data-storefront-qr
+  data-product-id="{{ qr_product.id }}"
+  data-proxy-subpath="{{ block.settings.proxy_subpath }}"
+  data-empty-message="{{ block.settings.empty_message | escape }}"
+  hidden
+>
+  <h3 class="storefront-qr__title" data-qr-title></h3>
+  <img class="storefront-qr__image" data-qr-image width="200" height="200" alt="">
+  <p class="storefront-qr__scans" data-qr-scans></p>
+  <p class="storefront-qr__help">{{ block.settings.help_text }}</p>
+</div>
+
+<p class="storefront-qr__message" data-qr-message hidden></p>
+
+<link rel="stylesheet" href="{{ 'storefront-qr.css' | asset_url }}">
+<script src="{{ 'storefront-qr.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "Product QR code",
+  "target": "section",
+  "templates": ["product"],
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Product",
+      "autofill": true
+    },
+    {
+      "type": "text",
+      "id": "proxy_subpath",
+      "label": "App proxy subpath",
+      "default": "qr-scan",
+      "info": "Must match your app proxy subpath. Use my-custom-path if you have not changed it yet."
+    },
+    {
+      "type": "text",
+      "id": "help_text",
+      "label": "Help text",
+      "default": "Scan to open this product on your phone."
+    },
+    {
+      "type": "text",
+      "id": "empty_message",
+      "label": "No QR code message",
+      "default": "Create a QR code for this product in the QRCode-rona app first."
+    }
+  ]
+}
+{% endschema %}
