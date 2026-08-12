@@ -19,7 +19,7 @@ import {
 
 // Dev-only: run `pnpm sync:app-url` after starting `shopify app dev`.
 // Production: set this to your deployed app URL before deploy.
-const APP_URL = "https://did-second-decent-consecutive.trycloudflare.com";
+const APP_URL = "https://cdna-wallet-gazette-knew.trycloudflare.com";
 
 function getPurchasedVariantIds(initialPurchase) {
   return (
@@ -129,19 +129,22 @@ export function App() {
 
   // Extract values from the calculated purchase.
   const shipping =
-    calculatedPurchase?.addedShippingLines[0]?.priceSet?.presentmentMoney
+    calculatedPurchase?.addedShippingLines?.[0]?.priceSet?.presentmentMoney
       ?.amount;
   const taxes =
-    calculatedPurchase?.addedTaxLines[0]?.priceSet?.presentmentMoney?.amount;
-  const total = calculatedPurchase?.totalOutstandingSet.presentmentMoney.amount;
+    calculatedPurchase?.addedTaxLines?.[0]?.priceSet?.presentmentMoney?.amount;
+  const total =
+    calculatedPurchase?.totalOutstandingSet?.presentmentMoney?.amount;
   const offeredVariantId =
-    purchaseOption.variantId ?? purchaseOption.changes[0]?.variantID;
+    purchaseOption.variantId ?? purchaseOption.changes?.[0]?.variantID;
   const offeredLineItem = calculatedPurchase?.updatedLineItems?.find(
     (item) => item.variantId === offeredVariantId,
   );
   const discountedPrice =
-    offeredLineItem?.totalPriceSet.presentmentMoney.amount;
-  const originalPrice = offeredLineItem?.priceSet.presentmentMoney.amount;
+    offeredLineItem?.totalPriceSet?.presentmentMoney?.amount;
+  const originalPrice = offeredLineItem?.priceSet?.presentmentMoney?.amount;
+  const discountTitle =
+    purchaseOption.changes?.[0]?.discount?.title ?? "a special discount";
 
   async function acceptOffer() {
     if (!calculatedPurchase || !total || paying) {
@@ -212,7 +215,7 @@ export function App() {
               Add the {purchaseOption.productTitle} to your order and{" "}
             </Text>
             <Text size="medium" emphasized>
-              {purchaseOption.changes[0].discount.title}
+              {discountTitle}
             </Text>
           </TextContainer>
         </BlockStack>
@@ -307,7 +310,7 @@ function PriceHeader({ discountedPrice, originalPrice, loading }) {
   );
 }
 
-function ProductDescription({ textLines }) {
+function ProductDescription({ textLines = [] }) {
   return (
     <BlockStack spacing="xtight">
       {textLines.map((text, index) => (
