@@ -6,24 +6,43 @@
 api_version = "2025-10"
 
 [[extensions]]
-name = "custom-delivery-instructions"
-handle = "custom-delivery-instructions"
+name = "custom-banner"
+handle = "custom-banner"
 type = "ui_extension"
-uid = "9d93ba67-d760-b256-641e-db7147a028d983fc5ddc"
+uid = "a11df538-16bc-a14a-1837-409727d7e91c41df6800"
 
 # Controls where in Shopify your extension will be injected,
 # and the file that contains your extension’s source code. Learn more:
 # https://shopify.dev/docs/api/checkout-ui-extensions/latest/extension-targets-overview
 
 [[extensions.targeting]]
+target = "purchase.checkout.block.render"
 module = "./src/Checkout.jsx"
-target = "purchase.checkout.shipping-option-list.render-after"
 
-[[extensions.targeting.metafields]]
-namespace = "custom"
-key = "field"
+[[extensions.targeting]]
+target = "purchase.checkout.delivery-address.render-before"
+module = "./src/Checkout.jsx"
 
-[extensions.capabilities]
-# Gives your extension access to directly query Shopify’s storefront API.
-# https://shopify.dev/docs/api/checkout-ui-extensions/latest/configuration#api-access
-api_access = true
+[extensions.settings]
+[[extensions.settings.fields]]
+key = "heading"
+type = "single_line_text_field"
+name = "Banner heading"
+description = "Enter a heading for the banner."
+[[extensions.settings.fields]]
+key = "description"
+type = "single_line_text_field"
+name = "Banner description"
+description = "Enter a description for the banner."
+[[extensions.settings.fields]]
+key = "tone"
+type = "single_line_text_field"
+name = "Banner tone"
+[[extensions.settings.fields.validations]]
+name = "choices"
+value = "[\"info\", \"success\", \"warning\", \"critical\"]"
+[[extensions.settings.fields]]
+key = "collapsible"
+type = "boolean"
+name = "Show collapsible description."
+description = "Display controls to expand or collapse the banner description."
