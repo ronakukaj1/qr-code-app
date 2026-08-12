@@ -1,5 +1,4 @@
 /// <reference path="../shopify.d.ts" />
-import "@shopify/ui-extensions/preact";
 import { render } from "preact";
 import { useState } from "preact/hooks";
 import { Survey, useStorageState } from "./shared.jsx";

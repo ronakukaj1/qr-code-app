@@ -1,5 +1,4 @@
 /// <reference path="../shopify.d.ts" />
-import "@shopify/ui-extensions/preact";
 import { useCallback, useEffect, useState } from "preact/hooks";
 
 /**
