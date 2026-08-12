@@ -1,0 +1,21 @@
+# Learn more about configuring your checkout UI extension:
+# https://shopify.dev/docs/api/checkout-ui-extensions/latest/configuration
+
+api_version = "2026-07"
+
+[[extensions]]
+name = "add-field-extension"
+handle = "add-field-extension"
+type = "ui_extension"
+uid = "3fdb9238-0738-7bd5-d79c-a27d35c2b757c15f9361"
+
+[[extensions.targeting]]
+module = "./src/Checkout.jsx"
+target = "purchase.checkout.shipping-option-list.render-after"
+
+[[extensions.targeting.metafields]]
+namespace = "$app"
+key = "deliveryInstructions"
+
+[extensions.capabilities]
+api_access = true
