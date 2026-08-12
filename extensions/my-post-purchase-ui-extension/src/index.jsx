@@ -19,7 +19,7 @@ import {
 
 // Dev-only: run `pnpm sync:app-url` after starting `shopify app dev`.
 // Production: set this to your deployed app URL before deploy.
-const APP_URL = "https://hint-convertible-driving-continually.trycloudflare.com";
+const APP_URL = "https://did-second-decent-consecutive.trycloudflare.com";
 
 function getPurchasedVariantIds(initialPurchase) {
   return (
