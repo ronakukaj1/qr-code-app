@@ -38,6 +38,9 @@ importers:
       isbot:
         specifier: ^5.1.31
         version: 5.2.1
+      jsonwebtoken:
+        specifier: ^9.0.3
+        version: 9.0.3
       prisma:
         specifier: ^6.16.3
         version: 6.19.3(typescript@5.9.3)
@@ -56,6 +59,9 @@ importers:
       tiny-invariant:
         specifier: ^1.3.3
         version: 1.3.3
+      uuid:
+        specifier: ^14.0.1
+        version: 14.0.1
       vite-tsconfig-paths:
         specifier: ^5.1.4
         version: 5.1.4(supports-color@7.2.0)(typescript@5.9.3)(vite@6.4.3(@types/node@22.20.1)(jiti@2.7.0)(yaml@2.9.0))
@@ -69,6 +75,9 @@ importers:
       '@types/eslint':
         specifier: ^9.6.1
         version: 9.6.1
+      '@types/jsonwebtoken':
+        specifier: ^9.0.10
+        version: 9.0.10
       '@types/node':
         specifier: ^22.18.8
         version: 22.20.1
@@ -78,6 +87,9 @@ importers:
       '@types/react-dom':
         specifier: ^18.3.7
         version: 18.3.7(@types/react@18.3.31)
+      '@types/uuid':
+        specifier: ^11.0.0
+        version: 11.0.0
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.21.0
         version: 6.21.0(@typescript-eslint/parser@6.21.0(eslint@8.57.1(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.9.3))(eslint@8.57.1(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.9.3)
@@ -126,6 +138,19 @@ importers:
       preact:
         specifier: ^10.10.x
         version: 10.29.8
+
+  extensions/my-post-purchase-ui-extension:
+    dependencies:
+      '@shopify/post-purchase-ui-extensions-react':
+        specifier: ^0.13.2
+        version: 0.13.5(react@17.0.2)
+      react:
+        specifier: ^17.0.0
+        version: 17.0.2
+    devDependencies:
+      '@types/react':
+        specifier: ^17.0.0
+        version: 17.0.93
 
 packages:
 
@@ -1138,6 +1163,24 @@ packages:
   '@remix-run/node-fetch-server@0.13.3':
     resolution: {integrity: sha512-UfjOXed/DQteaM5VyTfqTeGpHwyL2J5aoRGY6cydip4tt1ehNNeSwuXCC7AEGE0RWBs/7bgKxYkL/B/+UDe4AA==}
 
+  '@remote-ui/async-subscription@2.1.18':
+    resolution: {integrity: sha512-O+76qOiTGN6iJZBFncELNIBnhCbHAIYrsrG0n3SjmwXE9Gy6nl4xZoa5FqIcw5VPz7EAdwKBkFsRE5uyQB7FOw==}
+
+  '@remote-ui/core@2.1.17':
+    resolution: {integrity: sha512-zbvjNWhBZYIBCgIo1LCDZ/u4HX2+sfqLdekBxGO2B69uuAK8Xg733u8/kmusKa3zNbIqJumsh2fIXP/l3Bk0pg==}
+
+  '@remote-ui/core@2.2.7':
+    resolution: {integrity: sha512-9eiTKy2eNKcT76xS0Dpz06ae2oClGAUUjx+HTDsz6fh7n/SS8Avid5N7GOaRiny/6T/cMJxaCeycMQJsEviGjA==}
+
+  '@remote-ui/react@4.5.14':
+    resolution: {integrity: sha512-ZSb1jcHOUtdwXLI7lfqwweUISaykOSQk1Xp1/LqDnIq81ssgxiBYUPZbu8n+2IUZNpsHpzBVyVaJKcnpNTQFzw==}
+
+  '@remote-ui/rpc@1.4.7':
+    resolution: {integrity: sha512-ORiaKsbVBSEi3Z4YWOj5Ucrp70NrkNktI1hdqqfBW7Z3o0YoxTX9MIqtLmsc6721IbjmExvLrLip5I5Y7uAbng==}
+
+  '@remote-ui/types@1.1.3':
+    resolution: {integrity: sha512-P1kN1F3p0oMgnLN8Of1Ie9am3sLvJ7nhqHH1pvzkrxqjVwhhyPVZNcwOHyUNZPKp62izhDavdrcnqrdXzVJqGA==}
+
   '@repeaterjs/repeater@3.1.0':
     resolution: {integrity: sha512-TaoVksZRSx2KWYYpyLQtMQXXeS98VsgZImzW65xmiVgbYhXLk+aEsmzPLirqVuE4/XuUapH2iMtxUzaBNDzdSQ==}
 
@@ -1310,6 +1353,14 @@ packages:
     resolution: {integrity: sha512-e4OKlNHkDNHe9RCOnNgUuAkeTEH028YxS2pGEWhO/f1cHQyekhLVdY8AWznqfvgMlobwwvfgIaF+rc1jtNbYnw==}
     engines: {node: '>=22.18.0', pnpm: '>=10.2.0'}
 
+  '@shopify/post-purchase-ui-extensions-react@0.13.5':
+    resolution: {integrity: sha512-fe/Iz3mkx6T64y9XuLDqUZJSR+h5sj7MADPGpgKLb9mr2bDHF3+Up3lcCfru6EmaLCAHgV1NB2lLtoohnb4gTQ==}
+    peerDependencies:
+      react: '>=17.0.0 <18.0.0'
+
+  '@shopify/post-purchase-ui-extensions@0.13.5':
+    resolution: {integrity: sha512-sBDXAibVSQvSsr1uKx/OopA33ATdLZWimwmFEjch7oGh9vD1Rj01v4NbKgrC8RAoIjbn78+id1xRSbzFYqguag==}
+
   '@shopify/shopify-api@13.1.0':
     resolution: {integrity: sha512-TwYL9kPxOgQwwlc9tmnAmSDs79Gdg9QLaIMCfkaCJxkhWxIHVkPWa74GvbBwnmTtB8jkg61Ja4/Qxrk9bCBUiA==}
     engines: {node: '>=20.0.0'}
@@ -1373,6 +1424,12 @@ packages:
   '@types/json5@0.0.29':
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
 
+  '@types/jsonwebtoken@9.0.10':
+    resolution: {integrity: sha512-asx5hIG9Qmf/1oStypjanR7iKTv0gXQ1Ov/jfrX6kS/EO0OFni8orbmGCn0672NHR3kXHwpAwR+B368ZGN/2rA==}
+
+  '@types/ms@2.1.0':
+    resolution: {integrity: sha512-GsCCIZDE/p3i96vtEqx+7dBUGXrc7zeSK3wwPHIaRThS+9OhWIXRqzs4d6k1SVU8g91DrNRWxWUGhp5KXQb2VA==}
+
   '@types/node@22.20.1':
     resolution: {integrity: sha512-EANqOCF9QFyra+4pfxUcX9STKJpCLjMbObVzljIJomAWSnuSIEAvyzEU53GaajbXJEgdh0iEcPL+DGvpUd4k1Q==}
 
@@ -1384,11 +1441,24 @@ packages:
     peerDependencies:
       '@types/react': ^18.0.0
 
+  '@types/react-reconciler@0.26.7':
+    resolution: {integrity: sha512-mBDYl8x+oyPX/VBb3E638N0B7xG+SPk/EAMcVPeexqus/5aTpTphQi0curhhshOqRrc9t6OPoJfEUkbymse/lQ==}
+
+  '@types/react@17.0.93':
+    resolution: {integrity: sha512-KM4Ty/ZTLZupiYxZVAlP+InNJS3De6uBMdq0ePa6/04+eG9Y7ftnWfst1xTLQ5rwAhgHwQ4momt/O4KepdGBTw==}
+
   '@types/react@18.3.31':
     resolution: {integrity: sha512-vfEqpXTvwT91yhmwdfouStN2hSKwTvyRs8qpLfADyrq/kxDw0hZM7Wk9Ug1FELj8hIby+S/+kQCSRFF32nv2Qw==}
 
+  '@types/scheduler@0.16.8':
+    resolution: {integrity: sha512-WZLiwShhwLRmeV6zH+GkbOFT6Z6VklCItrDioxUnv+u4Ll+8vKeFySoFyK/0ctcRpOmwAicELfmys1sDc/Rw+A==}
+
   '@types/semver@7.8.0':
     resolution: {integrity: sha512-1mAINjtQCXXeLkJ9ehXkwOcBpqtLxiVtKhpUf83DdRNdQKV0iXZpaHYqRr7nj+wvxuJzoAmAwXI+sCNMv1CzLQ==}
+
+  '@types/uuid@11.0.0':
+    resolution: {integrity: sha512-HVyk8nj2m+jcFRNazzqyVKiZezyhDKrGUA3jlEcg/nZ6Ms+qHwocba1Y/AaVaznJTAM9xpdFSh+ptbNrhOGvZA==}
+    deprecated: This is a stub types definition. uuid provides its own type definitions, so you do not need this installed.
 
   '@types/ws@8.18.1':
     resolution: {integrity: sha512-ThVF6DCVhA8kUGy+aazFQ4kXQ7E1Ty7A3ypFOe0IcJV8O/M511G99AW24irKrW56Wt44yG9+ij8FaqoBGkuBXg==}
@@ -2902,6 +2972,10 @@ packages:
     engines: {node: '>=6'}
     hasBin: true
 
+  jsonwebtoken@9.0.3:
+    resolution: {integrity: sha512-MT/xP0CrubFRNLNKvxJ2BYfy53Zkm++5bX9dtuPbqAeQpTVe0MQTFhao8+Cp//EmJp244xt6Drw/GVEGCUj40g==}
+    engines: {node: '>=12', npm: '>=6'}
+
   jsx-ast-utils@3.3.5:
     resolution: {integrity: sha512-ZZow9HBI5O6EPgSJLUb8n2NKgmVWTwCvHGwFuJlMjvLFqlGG6pjirPhtdsseaLZjSibD8eegzmYpUZwoIlj2cQ==}
     engines: {node: '>=4.0'}
@@ -2949,8 +3023,29 @@ packages:
   lodash.camelcase@4.3.0:
     resolution: {integrity: sha512-TwuEnCnxbc3rAvhf/LbG7tJUDzhqXyFnv3dtzLOPgCG/hODL7WFnsbwktkD7yUV0RrreP/l1PALq/YSg6VvjlA==}
 
+  lodash.includes@4.3.0:
+    resolution: {integrity: sha512-W3Bx6mdkRTGtlJISOvVD/lbqjTlPPUDTMnlXZFnVwi9NKJ6tiAk6LVdlhZMm17VZisqhKcgzpO5Wz91PCt5b0w==}
+
+  lodash.isboolean@3.0.3:
+    resolution: {integrity: sha512-Bz5mupy2SVbPHURB98VAcw+aHh4vRV5IPNhILUCsOzRmsTmSQ17jIuqopAentWoehktxGd9e/hbIXq980/1QJg==}
+
+  lodash.isinteger@4.0.4:
+    resolution: {integrity: sha512-DBwtEWN2caHQ9/imiNeEA5ys1JoRtRfY3d7V9wkqtbycnAmTvRRmbHKDV4a0EYc678/dia0jrte4tjYwVBaZUA==}
+
+  lodash.isnumber@3.0.3:
+    resolution: {integrity: sha512-QYqzpfwO3/CWf3XP+Z+tkQsfaLL/EnUlXWVkIk5FUPc4sBdTehEqZONuyRt2P67PXAk+NXmTBcc97zw9t1FQrw==}
+
+  lodash.isplainobject@4.0.6:
+    resolution: {integrity: sha512-oSXzaWypCMHkPC3NvBEaPHf0KsA5mvPrOPgQWDsbg8n7orZ290M0BmC/jgRZ4vcJ6DTAhjrsSYgdsW/F+MFOBA==}
+
+  lodash.isstring@4.0.1:
+    resolution: {integrity: sha512-0wJxfxH1wgO3GrbuP+dTTk7op+6L41QCXbGINEmD+ny/G/eCqGzxyCsh7159S+mgDDcoarnBw6PC1PS5+wUGgw==}
+
   lodash.merge@4.6.2:
     resolution: {integrity: sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==}
+
+  lodash.once@4.1.1:
+    resolution: {integrity: sha512-Sb487aTOCr9drQVL8pIxOzVhafOjZN9UU54hiN8PU3uAiSV7lx1yYNpbNmex2PK6dSJoNTSJUUswT651yww3Mg==}
 
   lodash.snakecase@4.1.1:
     resolution: {integrity: sha512-QZ1d4xoBHYUeuouhEq3lk3Uq7ldgyFXGBhg04+oRLnIz8o9T65Eh+8YdroUwn846zchkA9yDsDl5CVVaV2nqYw==}
@@ -3429,6 +3524,12 @@ packages:
   react-is@16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
 
+  react-reconciler@0.26.2:
+    resolution: {integrity: sha512-nK6kgY28HwrMNwDnMui3dvm3rCFjZrcGiuwLc5COUipBK5hWHLOxMJhSnSomirqWwjPBJKV1QcbkI0VJr7Gl1Q==}
+    engines: {node: '>=0.10.0'}
+    peerDependencies:
+      react: ^17.0.2
+
   react-refresh@0.14.2:
     resolution: {integrity: sha512-jCvmsr+1IUSMUyzOkRcvnVbX3ZYC6g9TDrDbFuFmRDq7PD4yaGbLKNQL6k2jnArV8hjYxh7hVhAZB6s9HDGpZA==}
     engines: {node: '>=0.10.0'}
@@ -3442,6 +3543,10 @@ packages:
     peerDependenciesMeta:
       react-dom:
         optional: true
+
+  react@17.0.2:
+    resolution: {integrity: sha512-gnhPt75i/dq/z3/6q/0asP78D0u592D5L1pd7M8P+dck6Fu/jJeL6iVVK23fptSUZj8Vjf++7wXA8UNclGQcbA==}
+    engines: {node: '>=0.10.0'}
 
   react@18.3.1:
     resolution: {integrity: sha512-wS+hAgJShR0KhEvPJArfuPVN1+Hz1t0Y6n5jLrGQbkb4urgPE/0Rve+1kMB1v/oWgHgm4WIcV+i7F2pTVj+2iQ==}
@@ -3554,6 +3659,9 @@ packages:
 
   safer-buffer@2.1.2:
     resolution: {integrity: sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==}
+
+  scheduler@0.20.2:
+    resolution: {integrity: sha512-2eWfGgAqqWFGqtdMmcL5zCMK1U8KlXv8SQFGglL3CEtd0aDVDWgeF/YoCmvln55m5zSk3J/20hTaSBeSObsQDQ==}
 
   scheduler@0.23.2:
     resolution: {integrity: sha512-UOShsPwz7NrMUqhR6t0hWjFduvOzbtv7toDH1/hIrfRNIDBnnBWd0CwJTGvTpngVlmwGCdP9/Zl/tVrDqcuYzQ==}
@@ -3916,6 +4024,10 @@ packages:
   utils-merge@1.0.1:
     resolution: {integrity: sha512-pMZTvIkT1d+TFGvDOqodOclx0QWkkgi6Tdoa8gC8ffGAAqz9pzPTZWAybbsHHoED/ztMtkv/VoYTYyShUn81hA==}
     engines: {node: '>= 0.4.0'}
+
+  uuid@14.0.1:
+    resolution: {integrity: sha512-6ZxzVpzDXDa3bJWaHilVayA+BH/1zmxCJoVgvmqJnid/gPoKHxUrS/aC/T6LGQtNHT+XHG9fXPJB4d+IrU30Ew==}
+    hasBin: true
 
   valibot@1.4.2:
     resolution: {integrity: sha512-gjdCvJ6d3RyHAneqxMYMW9QMCwYMb3jpOO0IyHZV1bnRHFBHrX3VkIILt5XYR0WhwHiH7Mty8ovuPZ/O3gamrg==}
@@ -5352,6 +5464,35 @@ snapshots:
 
   '@remix-run/node-fetch-server@0.13.3': {}
 
+  '@remote-ui/async-subscription@2.1.18':
+    dependencies:
+      '@remote-ui/rpc': 1.4.7
+
+  '@remote-ui/core@2.1.17':
+    dependencies:
+      '@remote-ui/rpc': 1.4.7
+      '@remote-ui/types': 1.1.3
+
+  '@remote-ui/core@2.2.7':
+    dependencies:
+      '@remote-ui/rpc': 1.4.7
+      '@remote-ui/types': 1.1.3
+
+  '@remote-ui/react@4.5.14(react@17.0.2)':
+    dependencies:
+      '@remote-ui/async-subscription': 2.1.18
+      '@remote-ui/core': 2.2.7
+      '@remote-ui/rpc': 1.4.7
+      '@types/react': 17.0.93
+      '@types/react-reconciler': 0.26.7
+      react-reconciler: 0.26.2(react@17.0.2)
+    transitivePeerDependencies:
+      - react
+
+  '@remote-ui/rpc@1.4.7': {}
+
+  '@remote-ui/types@1.1.3': {}
+
   '@repeaterjs/repeater@3.1.0': {}
 
   '@rollup/rollup-android-arm-eabi@4.62.4':
@@ -5480,6 +5621,17 @@ snapshots:
 
   '@shopify/polaris-types@1.0.7': {}
 
+  '@shopify/post-purchase-ui-extensions-react@0.13.5(react@17.0.2)':
+    dependencies:
+      '@remote-ui/react': 4.5.14(react@17.0.2)
+      '@shopify/post-purchase-ui-extensions': 0.13.5
+      '@types/react': 17.0.93
+      react: 17.0.2
+
+  '@shopify/post-purchase-ui-extensions@0.13.5':
+    dependencies:
+      '@remote-ui/core': 2.1.17
+
   '@shopify/shopify-api@13.1.0':
     dependencies:
       '@shopify/admin-api-client': 1.1.2
@@ -5551,6 +5703,13 @@ snapshots:
 
   '@types/json5@0.0.29': {}
 
+  '@types/jsonwebtoken@9.0.10':
+    dependencies:
+      '@types/ms': 2.1.0
+      '@types/node': 22.20.1
+
+  '@types/ms@2.1.0': {}
+
   '@types/node@22.20.1':
     dependencies:
       undici-types: 6.21.0
@@ -5561,12 +5720,28 @@ snapshots:
     dependencies:
       '@types/react': 18.3.31
 
+  '@types/react-reconciler@0.26.7':
+    dependencies:
+      '@types/react': 18.3.31
+
+  '@types/react@17.0.93':
+    dependencies:
+      '@types/prop-types': 15.7.15
+      '@types/scheduler': 0.16.8
+      csstype: 3.2.3
+
   '@types/react@18.3.31':
     dependencies:
       '@types/prop-types': 15.7.15
       csstype: 3.2.3
 
+  '@types/scheduler@0.16.8': {}
+
   '@types/semver@7.8.0': {}
+
+  '@types/uuid@11.0.0':
+    dependencies:
+      uuid: 14.0.1
 
   '@types/ws@8.18.1':
     dependencies:
@@ -7360,6 +7535,19 @@ snapshots:
 
   json5@2.2.3: {}
 
+  jsonwebtoken@9.0.3:
+    dependencies:
+      jws: 4.0.1
+      lodash.includes: 4.3.0
+      lodash.isboolean: 3.0.3
+      lodash.isinteger: 4.0.4
+      lodash.isnumber: 3.0.3
+      lodash.isplainobject: 4.0.6
+      lodash.isstring: 4.0.1
+      lodash.once: 4.1.1
+      ms: 2.1.3
+      semver: 7.8.5
+
   jsx-ast-utils@3.3.5:
     dependencies:
       array-includes: 3.1.9
@@ -7416,7 +7604,21 @@ snapshots:
 
   lodash.camelcase@4.3.0: {}
 
+  lodash.includes@4.3.0: {}
+
+  lodash.isboolean@3.0.3: {}
+
+  lodash.isinteger@4.0.4: {}
+
+  lodash.isnumber@3.0.3: {}
+
+  lodash.isplainobject@4.0.6: {}
+
+  lodash.isstring@4.0.1: {}
+
   lodash.merge@4.6.2: {}
+
+  lodash.once@4.1.1: {}
 
   lodash.snakecase@4.1.1: {}
 
@@ -7865,6 +8067,13 @@ snapshots:
 
   react-is@16.13.1: {}
 
+  react-reconciler@0.26.2(react@17.0.2):
+    dependencies:
+      loose-envify: 1.4.0
+      object-assign: 4.1.1
+      react: 17.0.2
+      scheduler: 0.20.2
+
   react-refresh@0.14.2: {}
 
   react-router@7.18.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
@@ -7874,6 +8083,11 @@ snapshots:
       set-cookie-parser: 2.7.2
     optionalDependencies:
       react-dom: 18.3.1(react@18.3.1)
+
+  react@17.0.2:
+    dependencies:
+      loose-envify: 1.4.0
+      object-assign: 4.1.1
 
   react@18.3.1:
     dependencies:
@@ -8022,6 +8236,11 @@ snapshots:
       is-regex: 1.2.1
 
   safer-buffer@2.1.2: {}
+
+  scheduler@0.20.2:
+    dependencies:
+      loose-envify: 1.4.0
+      object-assign: 4.1.1
 
   scheduler@0.23.2:
     dependencies:
@@ -8465,6 +8684,8 @@ snapshots:
   util-deprecate@1.0.2: {}
 
   utils-merge@1.0.1: {}
+
+  uuid@14.0.1: {}
 
   valibot@1.4.2(typescript@5.9.3):
     optionalDependencies:
