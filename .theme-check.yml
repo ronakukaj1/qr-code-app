@@ -1,0 +1,10 @@
+root: extensions/storefront-qr
+extends: theme-check:theme-app-extension
+ignore:
+  - node_modules/**
+  - app/**
+  - prisma/**
+  - public/**
+  - build/**
+  - .react-router/**
+  - .shopify/**

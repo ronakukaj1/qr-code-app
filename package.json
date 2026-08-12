@@ -4,6 +4,7 @@
   "scripts": {
     "build": "react-router build",
     "dev": "shopify app dev",
+    "dev:local": "shopify app dev --use-localhost --install-mkcert --config shopify.app.local.toml",
     "config:link": "shopify app config link",
     "generate": "shopify app generate",
     "deploy": "shopify app deploy",
@@ -12,12 +13,14 @@
     "start": "react-router-serve ./build/server/index.js",
     "docker-start": "npm run setup && npm run start",
     "setup": "prisma generate && prisma migrate deploy",
-    "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
+    "lint": "eslint --ignore-path .eslintignore --cache --cache-location ./node_modules/.cache/eslint .",
     "shopify": "shopify",
     "prisma": "prisma",
     "graphql-codegen": "graphql-codegen",
     "vite": "vite",
-    "typecheck": "react-router typegen && tsc --noEmit"
+    "typecheck": "react-router typegen && tsc --noEmit",
+    "typecheck:extensions": "pnpm --filter \"./extensions/*\" exec tsc --noEmit",
+    "lint:extensions": "eslint extensions --no-error-on-unmatched-pattern"
   },
   "type": "module",
   "engines": {

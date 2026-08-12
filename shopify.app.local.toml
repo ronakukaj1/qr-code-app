@@ -1,0 +1,66 @@
+# Local dev config — use with: pnpm dev:local
+# Omits HTTP webhooks and app proxy so --use-localhost works in one command.
+# Production webhooks stay in shopify.app.toml and deploy normally.
+
+client_id = "359f8ba99521c0dc8017b27b369e26c5"
+application_url = "https://example.com"
+embedded = true
+name = "QRCode-rona"
+
+[access_scopes]
+scopes = "write_products,write_metaobjects,write_metaobject_definitions,read_orders, read_draft_orders, write_app_proxy"
+
+[product.metafields.app.demo_info]
+type = "single_line_text_field"
+name = "Demo Source Info"
+description = "Tracks products created by the Shopify app template for development"
+
+  [product.metafields.app.demo_info.access]
+  admin = "merchant_read_write"
+
+[metaobjects.app.qrcode]
+name = "QRCode"
+description = "Stores QR code data for products"
+
+  [metaobjects.app.qrcode.access]
+  admin = "merchant_read_write"
+
+[metaobjects.app.qrcode.fields.title]
+name = "Title"
+type = "single_line_text_field"
+required = true
+
+[metaobjects.app.qrcode.fields.product]
+name = "Product"
+type = "product_reference"
+required = true
+
+[metaobjects.app.qrcode.fields.product_variant]
+name = "Product Variant"
+type = "variant_reference"
+required = true
+
+[metaobjects.app.qrcode.fields.destination]
+name = "Destination"
+type = "single_line_text_field"
+required = true
+
+[metaobjects.app.qrcode.fields.scan_count]
+name = "Scans"
+type = "number_integer"
+required = true
+
+[webhooks]
+api_version = "2026-10"
+
+  # Pub/Sub only — no localhost HTTP webhook URLs required
+  [[webhooks.subscriptions]]
+  topics = [ "orders/create", "draft_orders/create" ]
+  uri = "pubsub://shopify-webhooks-505110:orders-create"
+
+[auth]
+redirect_urls = [ "https://example.com/api/auth" ]
+
+[build]
+include_config_on_deploy = true
+automatically_update_urls_on_dev = true

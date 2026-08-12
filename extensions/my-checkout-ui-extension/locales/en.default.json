@@ -1,0 +1,4 @@
+{
+  "heading": "QR Code",
+  "checkoutMessage": "QR codes from QRCode-rona will appear here. Edit extensions/my-checkout-ui-extension/src/Checkout.jsx to implement checkout UI."
+}

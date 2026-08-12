@@ -4,13 +4,15 @@
   blocks.forEach(async (block) => {
     const productId = block.dataset.productId;
     const proxySubpath = block.dataset.proxySubpath || "qr-scan";
-    const emptyMessage = block.dataset.emptyMessage || "No QR code for this product.";
+    const emptyMessage =
+      block.dataset.emptyMessage || "No QR code for this product.";
     const titleEl = block.querySelector("[data-qr-title]");
     const imageEl = block.querySelector("[data-qr-image]");
     const scansEl = block.querySelector("[data-qr-scans]");
     const messageEl = block.querySelector("[data-qr-message]");
 
     if (!productId) {
+      showMessage(messageEl, "Missing product ID.");
       return;
     }
 
@@ -20,9 +22,12 @@
         subpath: proxySubpath,
       });
 
-      const response = await fetch(`/apps/${proxySubpath}/qr?${params.toString()}`, {
-        headers: { Accept: "application/json" },
-      });
+      const response = await fetch(
+        `/apps/${proxySubpath}/qr?${params.toString()}`,
+        {
+          headers: { Accept: "application/json" },
+        },
+      );
 
       const result = await response.json();
 
@@ -44,11 +49,17 @@
       }
 
       block.hidden = false;
-    } catch (error) {
-      if (messageEl) {
-        messageEl.hidden = false;
-        messageEl.textContent = emptyMessage;
-      }
+    } catch {
+      showMessage(messageEl, emptyMessage);
     }
   });
+
+  function showMessage(element, text) {
+    if (!element) {
+      return;
+    }
+
+    element.hidden = false;
+    element.textContent = text;
+  }
 })();

@@ -19,7 +19,12 @@ module.exports = {
     commonjs: true,
     es6: true,
   },
-  ignorePatterns: ["!**/.server", "!**/.client"],
+  ignorePatterns: [
+    "!**/.server",
+    "!**/.client",
+    "extensions/*/dist/**",
+    "extensions/**/shopify.d.ts",
+  ],
 
   // Base config
   extends: ["eslint:recommended"],
@@ -50,6 +55,7 @@ module.exports = {
       },
       rules: {
         "react/no-unknown-property": ["error", { ignore: ["variant"] }],
+        "react/prop-types": "off",
       },
     },
 
