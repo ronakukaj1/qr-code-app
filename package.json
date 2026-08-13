@@ -3,10 +3,12 @@
   "private": true,
   "scripts": {
     "build": "react-router build",
-    "dev": "node scripts/dev-with-post-purchase-sync.mjs",
+    "dev": "shopify app dev",
+    "dev:sync": "node scripts/dev-with-post-purchase-sync.mjs",
     "dev:shopify": "shopify app dev",
     "dev:ngrok": "shopify app dev --tunnel-url=https://circular-tractor-garage.ngrok-free.dev:3000",
     "sync:app-url": "node scripts/sync-post-purchase-app-url.mjs",
+    "reset:sessions": "node scripts/reset-sessions.mjs",
     "dev:local": "shopify app dev --use-localhost --install-mkcert --config shopify.app.local.toml",
     "config:link": "shopify app config link",
     "generate": "shopify app generate",

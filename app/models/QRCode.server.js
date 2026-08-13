@@ -2,6 +2,7 @@ import invariant from "tiny-invariant";
 import QRCode from "qrcode";
 import { redirect } from "react-router";
 
+import { withGraphqlRetry } from "../graphql-retry.server";
 import { unauthenticated } from "../shopify.server";
 
 const METAOBJECT_TYPE = "$app:qrcode";
@@ -9,7 +10,9 @@ const METAOBJECT_TYPE = "$app:qrcode";
 
 
 export async function getQRCode(handle, graphql, shop) {
-    const response = await graphql(
+    const response = await withGraphqlRetry(
+      () =>
+        graphql(
         `
         query GetQRCode($handle: MetaobjectHandleInput!){
             metaobjectByHandle(handle: $handle){
@@ -49,6 +52,8 @@ export async function getQRCode(handle, graphql, shop) {
                 handle:{ type: METAOBJECT_TYPE, handle },
             },
         },
+    ),
+      { label: "getQRCode" },
     );
 
     const {data} = await response.json();
@@ -62,7 +67,9 @@ return transformMetaobject(metaobject, shop);
 }
 
 export async function getQRCodes (graphql, shop){
-    const response= await graphql(
+    const response = await withGraphqlRetry(
+      () =>
+        graphql(
         `
         query GetQRCodes($type: String!){
             metaobjects(type: $type, first: 50, sortKey: "updated_at", reverse: true){
@@ -107,6 +114,8 @@ export async function getQRCodes (graphql, shop){
             type: METAOBJECT_TYPE,
         },
     },
+    ),
+      { label: "getQRCodes" },
     );
 
     const {data} = await response.json();

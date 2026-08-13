@@ -10,6 +10,7 @@ import { boundary } from "@shopify/shopify-app-react-router/server";
 
 import {
   getQRCode,
+  getQRCodeScanUrl,
   validateQRCode,
   saveQRCode,
   deleteQRCode,
@@ -332,7 +333,10 @@ export default function QRCodeForm() {
                 >
                   <s-button
                     disabled={!initialFormState.handle}
-                    href={`/qrcodes/${initialFormState.handle}?shop=${loaderData.shop}`}
+                    href={getQRCodeScanUrl(
+                      initialFormState.handle,
+                      loaderData.shop,
+                    )}
                     target="_blank"
                   >
                     Go to public URL

@@ -1,0 +1,11 @@
+{
+  "name": "Details de commande checkout",
+  "heading": "Details de commande checkout",
+  "deliveryHeading": "Instructions de livraison",
+  "deliveryEmpty": "Aucune instruction de livraison.",
+  "surveyHeading": "Comment nous avez-vous connus ?",
+  "surveyEmpty": "Aucune reponse au sondage.",
+  "loading": "Chargement des details",
+  "loadError": "Impossible de charger les details.",
+  "missingOrder": "Impossible de determiner la commande actuelle."
+}

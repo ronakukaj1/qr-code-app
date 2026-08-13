@@ -41,14 +41,19 @@ export function useStorageState(key) {
  *   onSubmit: () => Promise<void>,
  *   children: import("preact").ComponentChildren,
  *   loading: boolean,
+ *   error?: string | null,
  * }} props
  */
-export function Survey({ title, description, onSubmit, children, loading }) {
+export function Survey({ title, description, onSubmit, children, loading, error }) {
   const [submitted, setSubmitted] = useState(false);
 
   async function handleSubmit() {
-    await onSubmit();
-    setSubmitted(true);
+    try {
+      await onSubmit();
+      setSubmitted(true);
+    } catch {
+      // Parent shows the error banner.
+    }
   }
 
   if (submitted) {
@@ -68,6 +73,7 @@ export function Survey({ title, description, onSubmit, children, loading }) {
         <s-heading>{title}</s-heading>
         <s-text>{description}</s-text>
         {children}
+        {error ? <s-banner tone="critical">{error}</s-banner> : null}
         <s-button variant="secondary" onClick={handleSubmit} loading={loading}>
           Submit feedback
         </s-button>

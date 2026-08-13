@@ -19,3 +19,19 @@ declare module './src/shared.jsx' {
     | import('@shopify/ui-extensions/customer-account.order-status.block.render').Api;
   const globalThis: { shopify: typeof shopify };
 }
+
+//@ts-ignore
+declare module './src/submitSurvey.js' {
+  const shopify:
+    | import('@shopify/ui-extensions/purchase.thank-you.block.render').Api
+    | import('@shopify/ui-extensions/customer-account.order-status.block.render').Api;
+  const globalThis: { shopify: typeof shopify };
+}
+
+//@ts-ignore
+declare module './src/app-url.js' {
+  const shopify:
+    | import('@shopify/ui-extensions/purchase.thank-you.block.render').Api
+    | import('@shopify/ui-extensions/customer-account.order-status.block.render').Api;
+  const globalThis: { shopify: typeof shopify };
+}

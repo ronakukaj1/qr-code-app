@@ -1,6 +1,6 @@
 import { authenticate, unauthenticated } from "../shopify.server";
 import { cacheOffers, getOffers } from "../offer.server";
-import { resolveShopDomain } from "../post-purchase.server";
+import { normalizePurchasedVariantIds, resolveShopDomain } from "../post-purchase.server";
 
 export const loader = async ({ request }) => {
   const { cors } = await authenticate.public.checkout(request);
@@ -11,10 +11,7 @@ export const action = async ({ request }) => {
   const { cors, sessionToken } = await authenticate.public.checkout(request);
   const body = await request.json().catch(() => ({}));
 
-  const purchasedVariantIds =
-    body.purchasedVariantIds ??
-    body.initialPurchase?.lineItems?.map((line) => line.product?.variant?.id) ??
-    [];
+  const purchasedVariantIds = normalizePurchasedVariantIds(body);
 
   let offers = [];
 

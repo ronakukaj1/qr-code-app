@@ -3,6 +3,7 @@ import "@shopify/ui-extensions/customer-account/preact";
 import { render } from "preact";
 import { useState } from "preact/hooks";
 import { Survey, useStorageState } from "./shared.jsx";
+import { submitSurvey } from "./submitSurvey.js";
 
 export default function () {
   render(<Attribution />, document.body);
@@ -11,20 +12,41 @@ export default function () {
 function Attribution() {
   const [attribution, setAttribution] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(/** @type {string | null} */ (null));
   const [attributionSubmitted, setAttributionSubmitted] = useStorageState(
     "attribution-submitted",
   );
 
   async function handleSubmit() {
+    if (!attribution) {
+      setError("Please select an option.");
+      return;
+    }
+
+    const orderId = shopify.order.value?.id;
+    const shopDomain = shopify.shop.myshopifyDomain;
+
+    if (!orderId) {
+      setError("Order is not available.");
+      return;
+    }
+
     setLoading(true);
-    await new Promise((resolve) => {
-      setTimeout(() => {
-        console.log("Submitted:", attribution);
-        setLoading(false);
-        setAttributionSubmitted(true);
-        resolve(undefined);
-      }, 750);
-    });
+    setError(null);
+
+    try {
+      await submitSurvey({ orderId, attribution, shopDomain });
+      setAttributionSubmitted(true);
+    } catch (submitError) {
+      setError(
+        submitError instanceof Error
+          ? submitError.message
+          : "Could not save your response.",
+      );
+      throw submitError;
+    } finally {
+      setLoading(false);
+    }
   }
 
   if (attributionSubmitted.loading || attributionSubmitted.data === true) {
@@ -37,6 +59,7 @@ function Attribution() {
       description="We would like to learn if you are enjoying your purchase."
       onSubmit={handleSubmit}
       loading={loading}
+      error={error}
     >
       <s-choice-list
         name="sale-attribution"
@@ -44,6 +67,7 @@ function Attribution() {
           setAttribution(
             /** @type {any} */ (event.currentTarget).values?.[0] ?? "",
           );
+          setError(null);
         }}
       >
         <s-choice value="tv" selected={attribution === "tv"}>

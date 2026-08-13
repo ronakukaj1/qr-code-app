@@ -17,13 +17,33 @@ import {
   View,
 } from "@shopify/post-purchase-ui-extensions-react";
 
-// Dev-only: run `pnpm sync:app-url` after starting `shopify app dev`.
-// Production: set this to your deployed app URL before deploy.
-const APP_URL = "https://cdna-wallet-gazette-knew.trycloudflare.com";
+import { APP_URL } from "./app-url.js";
+
+function parseVariantId(id) {
+  if (id == null) {
+    return null;
+  }
+
+  if (typeof id === "number" && Number.isFinite(id)) {
+    return id;
+  }
+
+  const value = String(id);
+  const gidMatch = value.match(/ProductVariant\/(\d+)/);
+
+  if (gidMatch) {
+    return Number(gidMatch[1]);
+  }
+
+  const numericId = Number(value);
+  return Number.isFinite(numericId) ? numericId : null;
+}
 
 function getPurchasedVariantIds(initialPurchase) {
   return (
-    initialPurchase?.lineItems?.map((line) => line.product?.variant?.id) ?? []
+    initialPurchase?.lineItems
+      ?.map((line) => parseVariantId(line.product?.variant?.id))
+      .filter((id) => id != null) ?? []
   );
 }
 

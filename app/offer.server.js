@@ -1,3 +1,5 @@
+import { parseVariantId } from "./post-purchase.server";
+
 /** @type {Map<string, object[]>} */
 const offerCache = new Map();
 
@@ -11,12 +13,22 @@ function pickUrl(...candidates) {
   return null;
 }
 
+function isPlaceholderImageUrl(url) {
+  if (!url) {
+    return true;
+  }
+
+  return /placeholder-images|no-image|default_product|placeholder\.svg/i.test(url);
+}
+
 function getProductImageUrl(product, variant) {
   const mediaNodes = product.media?.nodes ?? [];
 
   for (const node of mediaNodes) {
     const url = pickUrl(node.image?.url, node.preview?.image?.url);
-    if (url) return url;
+    if (url && !isPlaceholderImageUrl(url)) {
+      return url;
+    }
   }
 
   return pickUrl(
@@ -27,9 +39,12 @@ function getProductImageUrl(product, variant) {
   );
 }
 
-function buildOffer(product, variant, index) {
-  const variantId = Number(variant.legacyResourceId);
-  const productImageURL = getProductImageUrl(product, variant);
+function buildOffer(product, variant, index, productImageURL) {
+  const variantId = parseVariantId(variant.legacyResourceId);
+
+  if (variantId == null || !productImageURL) {
+    return null;
+  }
 
   return {
     id: index + 1,
@@ -55,6 +70,47 @@ function buildOffer(product, variant, index) {
   };
 }
 
+function collectOfferCandidates(products, purchasedIds) {
+  /** @type {{ product: any; variant: any; imageUrl: string; hasRealImage: boolean }[]} */
+  const candidates = [];
+
+  for (const product of products) {
+    if (/gift card/i.test(product.title)) {
+      continue;
+    }
+
+    for (const variant of product.variants?.nodes ?? []) {
+      const variantId = parseVariantId(variant.legacyResourceId);
+
+      if (variantId == null || purchasedIds.has(variantId)) {
+        continue;
+      }
+
+      const imageUrl = getProductImageUrl(product, variant);
+
+      if (!imageUrl) {
+        continue;
+      }
+
+      candidates.push({
+        product,
+        variant,
+        imageUrl,
+        hasRealImage: !isPlaceholderImageUrl(imageUrl),
+      });
+    }
+  }
+
+  return candidates;
+}
+
+function selectOfferCandidates(candidates) {
+  const withRealImages = candidates.filter((candidate) => candidate.hasRealImage);
+  const pool = withRealImages.length > 0 ? withRealImages : candidates;
+
+  return pool.slice(0, 3);
+}
+
 export function cacheOffers(referenceId, offers) {
   if (referenceId) {
     offerCache.set(referenceId, offers);
@@ -71,57 +127,69 @@ export async function getOffers(admin, { purchasedVariantIds = [] } = {}) {
   }
 
   const purchasedIds = new Set(
-    purchasedVariantIds.map((id) => Number(id)).filter(Boolean),
+    purchasedVariantIds
+      .map((id) => parseVariantId(id))
+      .filter((id) => id != null),
   );
 
-  const response = await admin.graphql(
-    `#graphql
-      query PostPurchaseOfferProducts {
-        products(first: 20, sortKey: TITLE) {
-          nodes {
-            title
-            featuredImage {
-              url
-            }
-            featuredMedia {
-              preview {
-                image {
-                  url
-                }
-              }
-            }
-            images(first: 1) {
-              nodes {
+  let response;
+
+  try {
+    response = await admin.graphql(
+      `#graphql
+        query PostPurchaseOfferProducts {
+          products(first: 50, sortKey: TITLE, query: "status:active") {
+            nodes {
+              title
+              featuredImage {
                 url
               }
-            }
-            media(first: 3) {
-              nodes {
+              featuredMedia {
                 preview {
                   image {
                     url
                   }
                 }
-                ... on MediaImage {
+              }
+              images(first: 5) {
+                nodes {
+                  url
+                }
+              }
+              media(first: 5) {
+                nodes {
+                  preview {
+                    image {
+                      url
+                    }
+                  }
+                  ... on MediaImage {
+                    image {
+                      url
+                    }
+                  }
+                }
+              }
+              variants(first: 5) {
+                nodes {
+                  legacyResourceId
+                  price
                   image {
                     url
                   }
                 }
               }
             }
-            variants(first: 5) {
-              nodes {
-                legacyResourceId
-                price
-                image {
-                  url
-                }
-              }
-            }
           }
-        }
-      }`,
-  );
+        }`,
+    );
+  } catch (error) {
+    console.error(
+      "[post-purchase] Product query failed:",
+      error?.graphQLErrors ?? error?.message ?? error,
+    );
+    return [];
+  }
 
   const result = await response.json();
 
@@ -130,36 +198,31 @@ export async function getOffers(admin, { purchasedVariantIds = [] } = {}) {
     return [];
   }
 
-  const offers = [];
+  const products = result.data?.products?.nodes ?? [];
+  const candidates = collectOfferCandidates(products, purchasedIds);
+  const selected = selectOfferCandidates(candidates);
 
-  for (const product of result.data?.products?.nodes ?? []) {
-    if (/gift card/i.test(product.title)) {
-      continue;
-    }
-
-    for (const variant of product.variants?.nodes ?? []) {
-      const variantId = Number(variant.legacyResourceId);
-
-      if (!variantId || purchasedIds.has(variantId)) {
-        continue;
-      }
-
-      const offer = buildOffer(product, variant, offers.length);
-
-      if (!offer.productImageURL) {
-        console.warn(
-          `[post-purchase] Skipping offer without image: ${product.title}`,
-        );
-        continue;
-      }
-
-      offers.push(offer);
-
-      if (offers.length >= 3) {
-        return offers;
-      }
-    }
+  if (selected.length === 0) {
+    console.warn(
+      `[post-purchase] No offer candidates from ${products.length} product(s)`,
+    );
+    return [];
   }
+
+  const offers = selected
+    .map((candidate, index) =>
+      buildOffer(
+        candidate.product,
+        candidate.variant,
+        index,
+        candidate.imageUrl,
+      ),
+    )
+    .filter((offer) => offer != null);
+
+  console.log(
+    `[post-purchase] Selected ${offers.length} offer(s); first: ${offers[0]?.productTitle ?? "none"}`,
+  );
 
   return offers;
 }

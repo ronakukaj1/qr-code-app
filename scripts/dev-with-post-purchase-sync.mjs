@@ -9,6 +9,7 @@ const manifestPath = path.join(root, ".shopify/dev-bundle/manifest.json");
 const syncScript = path.join(__dirname, "sync-post-purchase-app-url.mjs");
 
 let lastSyncedUrl = null;
+let syncInFlight = false;
 
 function readAppUrl() {
   if (!fs.existsSync(manifestPath)) {
@@ -27,9 +28,11 @@ function readAppUrl() {
 function syncAppUrl() {
   const appUrl = readAppUrl();
 
-  if (!appUrl || appUrl === lastSyncedUrl) {
+  if (!appUrl || appUrl === lastSyncedUrl || syncInFlight) {
     return;
   }
+
+  syncInFlight = true;
 
   const child = spawn(process.execPath, [syncScript, appUrl], {
     cwd: root,
@@ -37,6 +40,8 @@ function syncAppUrl() {
   });
 
   child.on("exit", (code) => {
+    syncInFlight = false;
+
     if (code === 0) {
       lastSyncedUrl = appUrl;
     }
@@ -46,10 +51,15 @@ function syncAppUrl() {
 const dev = spawn("shopify", ["app", "dev", ...process.argv.slice(2)], {
   cwd: root,
   stdio: "inherit",
+  env: {
+    ...process.env,
+    NODE_OPTIONS: [process.env.NODE_OPTIONS, "--dns-result-order=ipv4first"]
+      .filter(Boolean)
+      .join(" "),
+  },
 });
 
-const pollInterval = setInterval(syncAppUrl, 2000);
-syncAppUrl();
+const pollInterval = setInterval(syncAppUrl, 3000);
 
 dev.on("exit", (code) => {
   clearInterval(pollInterval);

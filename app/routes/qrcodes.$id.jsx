@@ -1,10 +1,12 @@
 import invariant from "tiny-invariant";
 import { useLoaderData } from "react-router";
 
-import { unauthenticated } from "../shopify.server";
+import { authenticate, unauthenticated } from "../shopify.server";
 import { getQRCodeImage } from "../models/QRCode.server";
 
 export const loader = async ({ request, params }) => {
+  await authenticate.public.appProxy(request);
+
   invariant(params.id, "Could not find QR code destination");
 
   const url = new URL(request.url);

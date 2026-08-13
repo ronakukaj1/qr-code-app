@@ -60,7 +60,7 @@ function Extension() {
     try {
       const { data, errors } = await query(
         `query ($first: Int!) {
-          products(first: $first) {
+          products(first: $first, query: "available_for_sale:true") {
             nodes {
               id
               title
@@ -90,7 +90,12 @@ function Extension() {
       }
 
       const productsData = /** @type {ProductsQueryData | undefined} */ (data);
-      setProducts(productsData?.products.nodes ?? []);
+      const loadedProducts = (productsData?.products.nodes ?? []).filter(
+        (product) =>
+          !/gift card/i.test(product.title) &&
+          product.variants.nodes[0]?.id != null,
+      );
+      setProducts(loadedProducts);
     } catch (error) {
       console.error(error);
       setFetchError(
@@ -201,9 +206,13 @@ function getProductsOnOffer(lines, products) {
  */
 function ProductOffer({ product, i18n, adding, handleAddToCart, showError }) {
   const { images, title, variants } = product;
-  const renderPrice = i18n.formatCurrency(
-    Number(variants.nodes[0].price.amount)
-  );
+  const variant = variants.nodes[0];
+
+  if (!variant) {
+    return null;
+  }
+
+  const renderPrice = i18n.formatCurrency(Number(variant.price.amount));
   const imageUrl =
     images.nodes[0]?.url ??
     "https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_medium.png?format=webp&v=1530129081";
@@ -233,7 +242,7 @@ function ProductOffer({ product, i18n, adding, handleAddToCart, showError }) {
             variant="secondary"
             loading={adding}
             accessibilityLabel={`Add ${title} to cart`}
-            onClick={() => handleAddToCart(variants.nodes[0].id)}
+            onClick={() => handleAddToCart(variant.id)}
           >
             Add
           </s-button>

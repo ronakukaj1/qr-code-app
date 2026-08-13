@@ -1,0 +1,11 @@
+{
+  "name": "Checkout order details",
+  "heading": "Checkout order details",
+  "deliveryHeading": "Delivery instructions",
+  "deliveryEmpty": "No delivery instructions provided.",
+  "surveyHeading": "How did you hear about us?",
+  "surveyEmpty": "No survey response yet.",
+  "loading": "Loading checkout details",
+  "loadError": "Could not load checkout details.",
+  "missingOrder": "Could not determine the current order."
+}

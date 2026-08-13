@@ -7,7 +7,7 @@ name = "QRCode-rona"
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
-scopes = "write_products,write_metaobjects,write_metaobject_definitions,read_orders, read_draft_orders, write_app_proxy"
+scopes = "write_products,write_metaobjects,write_metaobject_definitions,read_orders,write_orders,read_draft_orders,write_app_proxy"
 
 [product.metafields.app.demo_info]
 type = "single_line_text_field"
@@ -49,6 +49,21 @@ name = "Scans"
 type = "number_integer"
 required = true
 
+[order.metafields.app.deliveryInstructions]
+name = "Delivery instructions"
+type = "multi_line_text_field"
+capabilities.cart_to_order_copyable = true
+
+  [order.metafields.app.deliveryInstructions.access]
+  admin = "merchant_read_write"
+
+[order.metafields.app.surveyAttribution]
+name = "Survey response"
+type = "single_line_text_field"
+
+  [order.metafields.app.surveyAttribution.access]
+  admin = "merchant_read_write"
+
 [webhooks]
 api_version = "2026-10"
 
@@ -68,7 +83,6 @@ api_version = "2026-10"
 redirect_urls = [ "https://example.com/api/auth" ]
 
 [build]
-include_config_on_deploy = true
 automatically_update_urls_on_dev = true
 
 [app_proxy]

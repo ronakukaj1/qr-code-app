@@ -6,11 +6,23 @@ import { getQRCodes } from "../models/QRCode.server";
 
 export async function loader({ request }) {
   const { admin, session } = await authenticate.admin(request);
-  const qrCodes = await getQRCodes(admin.graphql, session.shop);
 
-  return {
-    qrCodes,
-  };
+  try {
+    const qrCodes = await getQRCodes(admin.graphql, session.shop);
+
+    return {
+      qrCodes,
+      loadError: null,
+    };
+  } catch (error) {
+    console.error("[app._index] Failed to load QR codes:", error);
+
+    return {
+      qrCodes: [],
+      loadError:
+        "Could not reach Shopify. Run `pnpm reset:sessions`, restart with `pnpm dev`, then open the app again from Shopify admin to re-authenticate.",
+    };
+  }
 }
 
 const EmptyQRCodeState = ({ onCreate }) => (
@@ -107,7 +119,7 @@ const QRTableRow = ({ qrCode }) => (
 );
 
 export default function Index() {
-  const { qrCodes } = useLoaderData();
+  const { qrCodes, loadError } = useLoaderData();
   const navigate = useNavigate();
   const createQRCode = () => navigate("/app/qrcodes/new");
 
@@ -116,7 +128,9 @@ export default function Index() {
       <s-button slot="secondary-actions" onClick={createQRCode}>
         Create QR code
       </s-button>
-      {qrCodes.length === 0 ? (
+      {loadError ? (
+        <s-banner tone="critical">{loadError}</s-banner>
+      ) : qrCodes.length === 0 ? (
         <EmptyQRCodeState onCreate={createQRCode} />
       ) : (
         <QRTable qrCodes={qrCodes} />
