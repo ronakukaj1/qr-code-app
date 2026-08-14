@@ -48,7 +48,9 @@ function syncAppUrl() {
   });
 }
 
-const dev = spawn("shopify", ["app", "dev", ...process.argv.slice(2)], {
+const shopifyArgs = ["app", "dev", "--config", "shopify.app.toml", ...filteredArgs];
+
+const dev = spawn("shopify", shopifyArgs, {
   cwd: root,
   stdio: "inherit",
   env: {

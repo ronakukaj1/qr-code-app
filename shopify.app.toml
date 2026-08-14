@@ -7,7 +7,7 @@ name = "QRCode-rona"
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
-scopes = "write_products,write_metaobjects,write_metaobject_definitions,read_orders,write_orders,read_draft_orders,write_app_proxy"
+scopes = "write_products,write_metaobjects,write_metaobject_definitions,read_orders,write_orders,read_draft_orders,write_app_proxy,write_discounts"
 
 [product.metafields.app.demo_info]
 type = "single_line_text_field"
@@ -89,3 +89,9 @@ automatically_update_urls_on_dev = true
 url = "/my-app-proxy"
 prefix = "apps"
 subpath = "qr-scan"
+
+[discount.metafields.app.function-configuration]
+type = "json"
+name = "Function configuration"
+access.admin = "merchant_read_write"
+access.storefront = "none"
