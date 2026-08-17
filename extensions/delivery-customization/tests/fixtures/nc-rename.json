@@ -1,0 +1,17 @@
+{
+  "cart": {
+    "deliveryGroups": [
+      {
+        "deliveryAddress": {
+          "provinceCode": "NC"
+        },
+        "deliveryOptions": [
+          {
+            "handle": "test-handle",
+            "title": "Standard"
+          }
+        ]
+      }
+    ]
+  }
+}
