@@ -2,6 +2,7 @@ import "@shopify/ui-extensions/preact";
 import { render } from "preact";
 import { useEffect, useState } from "preact/hooks";
 
+const APP_METAFIELD_NAMESPACE = "$app";
 const DELIVERY_INSTRUCTIONS_KEY = "deliveryInstructions";
 const SURVEY_ATTRIBUTION_KEY = "surveyAttribution";
 
@@ -45,11 +46,17 @@ function Extension() {
         `#graphql
           query OrderCheckoutDetails($id: ID!) {
             order(id: $id) {
-              metafields(first: 20) {
-                nodes {
-                  key
-                  value
-                }
+              deliveryInstructions: metafield(
+                namespace: "${APP_METAFIELD_NAMESPACE}"
+                key: "${DELIVERY_INSTRUCTIONS_KEY}"
+              ) {
+                value
+              }
+              surveyAttribution: metafield(
+                namespace: "${APP_METAFIELD_NAMESPACE}"
+                key: "${SURVEY_ATTRIBUTION_KEY}"
+              ) {
+                value
               }
             }
           }
@@ -61,16 +68,10 @@ function Extension() {
         throw new Error(errors.map((entry) => entry.message).join(", "));
       }
 
-      /** @type {{ order?: { metafields?: { nodes?: Array<{ key?: string; value?: string | null }> } | null } | null } | undefined} */
+      /** @type {{ order?: { deliveryInstructions?: { value?: string | null } | null; surveyAttribution?: { value?: string | null } | null } | null } | undefined} */
       const orderData = result;
-      const metafields = orderData?.order?.metafields?.nodes ?? [];
-
-      const instructions = metafields.find(
-        (metafield) => metafield.key === DELIVERY_INSTRUCTIONS_KEY,
-      )?.value;
-      const survey = metafields.find(
-        (metafield) => metafield.key === SURVEY_ATTRIBUTION_KEY,
-      )?.value;
+      const instructions = orderData?.order?.deliveryInstructions?.value;
+      const survey = orderData?.order?.surveyAttribution?.value;
 
       setDeliveryInstructions(
         typeof instructions === "string" && instructions.trim()

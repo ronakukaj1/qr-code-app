@@ -48,7 +48,8 @@ function syncAppUrl() {
   });
 }
 
-const shopifyArgs = ["app", "dev", "--config", "shopify.app.toml", ...filteredArgs];
+const extraArgs = process.argv.slice(2);
+const shopifyArgs = ["app", "dev", "--config", "shopify.app.toml", ...extraArgs];
 
 const dev = spawn("shopify", shopifyArgs, {
   cwd: root,

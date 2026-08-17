@@ -11,6 +11,9 @@ uid = "cc9c86d3-f8f4-5980-b2f3-ccebeb6fe852e0c3370f"
 module = "./src/BlockExtension.jsx"
 target = "admin.order-details.block.render"
 
+[extensions.capabilities]
+api_access = true
+
 
 # Valid extension targets:
 

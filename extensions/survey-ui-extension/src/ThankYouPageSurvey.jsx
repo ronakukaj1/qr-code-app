@@ -43,7 +43,6 @@ function Attribution() {
           ? submitError.message
           : "Could not save your response.",
       );
-      throw submitError;
     } finally {
       setLoading(false);
     }
