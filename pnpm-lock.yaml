@@ -163,6 +163,15 @@ importers:
         specifier: ^10.10.x
         version: 10.29.8
 
+  extensions/cart-checkout-validation:
+    devDependencies:
+      '@shopify/shopify-function-test-helpers':
+        specifier: ^1.0.0
+        version: 1.1.0
+      vitest:
+        specifier: ^3.2.4
+        version: 3.2.7(@types/node@22.20.1)(jiti@2.7.0)(supports-color@7.2.0)(yaml@2.9.0)
+
   extensions/custom-breadcrumbs-extension:
     dependencies:
       '@preact/signals':
@@ -175,6 +184,15 @@ importers:
         specifier: ^10.10.x
         version: 10.29.8
 
+  extensions/delivery-customization:
+    devDependencies:
+      '@shopify/shopify-function-test-helpers':
+        specifier: ^1.0.0
+        version: 1.1.0
+      vitest:
+        specifier: ^3.2.4
+        version: 3.2.7(@types/node@22.20.1)(jiti@2.7.0)(supports-color@7.2.0)(yaml@2.9.0)
+
   extensions/delivery-instructions-block:
     dependencies:
       '@preact/signals':
@@ -186,6 +204,15 @@ importers:
       preact:
         specifier: ^10.10.x
         version: 10.29.8
+
+  extensions/demo-cart-transform-extension:
+    devDependencies:
+      '@shopify/shopify-function-test-helpers':
+        specifier: ^1.0.0
+        version: 1.1.0
+      vitest:
+        specifier: ^3.2.4
+        version: 3.2.7(@types/node@22.20.1)(jiti@2.7.0)(supports-color@7.2.0)(yaml@2.9.0)
 
   extensions/discount-function-rs:
     devDependencies:
@@ -220,6 +247,15 @@ importers:
       '@types/react':
         specifier: ^17.0.0
         version: 17.0.93
+
+  extensions/payment-customization:
+    devDependencies:
+      '@shopify/shopify-function-test-helpers':
+        specifier: ^1.0.0
+        version: 1.1.0
+      vitest:
+        specifier: ^3.2.4
+        version: 3.2.7(@types/node@22.20.1)(jiti@2.7.0)(supports-color@7.2.0)(yaml@2.9.0)
 
   extensions/survey-ui-extension:
     dependencies:

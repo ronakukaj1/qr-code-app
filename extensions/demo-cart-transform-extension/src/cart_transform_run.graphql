@@ -1,0 +1,27 @@
+query Input {
+  presentmentCurrencyRate
+  cart {
+    lines {
+      id
+      quantity
+      merchandise {
+        __typename
+        ... on ProductVariant {
+          id
+          component_reference: metafield(
+            namespace: "custom"
+            key: "component_reference"
+          ) {
+            jsonValue
+          }
+          component_prices: metafield(
+            namespace: "custom"
+            key: "component_prices"
+          ) {
+            jsonValue
+          }
+        }
+      }
+    }
+  }
+}

@@ -17,7 +17,7 @@ fn cart_validations_generate_run(
 
     let order_subtotal: f64 = input.cart().cost().subtotal_amount().amount().as_f64();
 
-    if order_subtotal > 1000.0 {
+    if order_subtotal > 5000.0 {
         if let Some(buyer_identity) = input.cart().buyer_identity() {
             if let Some(customer) = buyer_identity.customer() {
                 if *customer.number_of_orders() < 5 {
