@@ -4,9 +4,9 @@ api_version = "2026-01"
 type = "ui_extension"
 # Change the merchant-facing name of the extension in locales/en.default.json
 name = "t:name"
-uid = "345ccfd5-db08-643f-6aee-176d9f46ec44dd91e92f"
-handle = "qr-pos-tile"
-description = "Look up your store name from POS"
+uid = "83202239-bc68-5d01-5903-daa990777202984a49a3"
+handle = "pos-discount"
+description = "Apply percentage or fixed cart discounts"
 
 # module: file that contains your extension’s source code
 # target: location where your extension appears in POS

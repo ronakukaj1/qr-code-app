@@ -1,0 +1,7 @@
+{
+  "name": "Rabais",
+  "tile_heading": "Application de rabais",
+  "tile_subheading": "Preact",
+  "modal_heading": "Rabais disponibles",
+  "welcome": "Bienvenue dans l'extension {{flavor}}"
+}

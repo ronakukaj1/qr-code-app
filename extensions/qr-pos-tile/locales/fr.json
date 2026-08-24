@@ -1,8 +1,7 @@
 {
-  "name": "qr-pos-tile",
-  "tile_heading": "Grille intelligente POS",
-  "tile_subheading": "Extension {{flavor}}",
-  "modal_heading": "Fenêtre modale POS",
+  "name": "Localisation du magasin",
+  "tile_heading": "Où suis-je ?",
+  "tile_subheading": "Trouvez votre boutique Shopify",
+  "modal_heading": "Où suis-je ?",
   "welcome": "Bienvenue dans l'extension {{flavor}}"
 }
-

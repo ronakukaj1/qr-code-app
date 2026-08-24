@@ -1,8 +1,7 @@
 {
-  "name": "qr-pos-tile",
-  "tile_heading": "POS smart grid",
-  "tile_subheading": "{{flavor}} Extension",
-  "modal_heading": "POS modal",
+  "name": "Store lookup",
+  "tile_heading": "Where am I?",
+  "tile_subheading": "Find your Shopify store",
+  "modal_heading": "Where am I?",
   "welcome": "Welcome to the {{flavor}} extension"
 }
-

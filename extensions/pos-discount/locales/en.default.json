@@ -1,0 +1,7 @@
+{
+  "name": "Discount",
+  "tile_heading": "Discount Example App",
+  "tile_subheading": "Preact",
+  "modal_heading": "Available Discounts",
+  "welcome": "Welcome to the {{flavor}} extension"
+}
