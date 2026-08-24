@@ -65,6 +65,15 @@ type = "single_line_text_field"
   [order.metafields.app.surveyAttribution.access]
   admin = "merchant_read_write"
 
+[events]
+api_version = "unstable"
+
+  [[events.subscription]]
+  handle = "order-create-events"
+  topic = "Order"
+  actions = ["create"]
+  uri = "pubsub://shopify-webhooks-505110:orders-create"
+
 [webhooks]
 api_version = "2026-10"
 
