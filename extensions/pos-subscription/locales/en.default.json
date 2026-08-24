@@ -1,0 +1,7 @@
+{
+  "name": "Subscription Tutorial",
+  "tile_heading": "Subscriptions",
+  "tile_subheading": "Subscriptions available",
+  "modal_heading": "POS subscription modal",
+  "welcome": "Welcome to the {{flavor}} extension"
+}

@@ -1,0 +1,7 @@
+{
+  "name": "Tutoriel d'abonnement",
+  "tile_heading": "Abonnements",
+  "tile_subheading": "Abonnements disponibles",
+  "modal_heading": "Fenêtre modale d'abonnement POS",
+  "welcome": "Bienvenue dans l'extension {{flavor}}"
+}

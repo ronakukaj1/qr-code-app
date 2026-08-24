@@ -1,0 +1,24 @@
+api_version = "2025-10"
+
+[[extensions]]
+type = "ui_extension"
+name = "t:name"
+uid = "52b2a41b-b612-45da-8d0b-68be19c0bba1e9653a2d"
+handle = "pos-subscription"
+description = "POS UI extension subscription tutorial"
+
+[[extensions.targeting]]
+module = "./src/Tile.jsx"
+target = "pos.home.tile.render"
+
+[[extensions.targeting]]
+module = "./src/Modal.jsx"
+target = "pos.home.modal.render"
+
+[[extensions.targeting]]
+module = "./src/Action.jsx"
+target = "pos.cart.line-item-details.action.render"
+
+[[extensions.targeting]]
+module = "./src/MenuItem.jsx"
+target = "pos.cart.line-item-details.action.menu-item.render"
