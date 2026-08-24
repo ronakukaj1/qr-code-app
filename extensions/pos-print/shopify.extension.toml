@@ -1,0 +1,19 @@
+api_version = "2026-01"
+
+[[extensions]]
+type = "ui_extension"
+name = "t:name"
+uid = "4ccf1737-67e7-1c46-6426-c75ae671fbbb10a3daa9"
+handle = "pos-print"
+description = "Print receipts, packing slips, and other POS documents"
+
+[[extensions.targeting]]
+module = "./src/PrintTile.jsx"
+target = "pos.home.tile.render"
+
+[[extensions.targeting]]
+module = "./src/PrintModal.jsx"
+target = "pos.home.modal.render"
+
+[extensions.capabilities]
+network_access = true

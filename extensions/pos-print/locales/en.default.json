@@ -1,0 +1,7 @@
+{
+  "name": "Print Tutorial",
+  "tile_heading": "Print Tutorial",
+  "tile_subheading": "Print POS documents",
+  "modal_heading": "Print Tutorial",
+  "welcome": "Welcome to the {{flavor}} extension"
+}
