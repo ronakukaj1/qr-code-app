@@ -123,3 +123,6 @@ access.storefront = "none"
 
 [pos]
 embedded = true
+
+[sidekick]
+extensions_summary = "Search QR codes for products, view scan counts and destinations, and find QR codes linked to specific products"

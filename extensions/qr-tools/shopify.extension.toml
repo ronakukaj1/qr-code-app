@@ -1,0 +1,15 @@
+api_version = "2025-10"
+
+[[extensions]]
+# Change the merchant-facing name of the extension in locales/en.default.json
+name = "QR code tools"
+handle = "qr-tools"
+type = "ui_extension"
+uid = "56cb07a7-5a14-e980-2cdb-86f431eff209b5982182"
+description = "Search QR codes for products, view scan counts, destinations, and linked product details"
+
+[[extensions.targeting]]
+module = "./src/index.js"
+target = "admin.app.tools.data"
+tools = "./tools.json"
+instructions = "./instructions.md"

@@ -1,7 +1,5 @@
 {
   "compilerOptions": {
-    "jsx": "react-jsx",
-    "jsxImportSource": "preact",
     "target": "ES2020",
     "checkJs": true,
     "allowJs": true,
@@ -10,6 +8,5 @@
     "noEmit": true,
     "skipLibCheck": true
   },
-  "include": ["./src/**/*.jsx", "./src/**/*.js", "./shopify.d.ts"],
-  "exclude": ["./dist/**"]
+  "include": ["./src/**/*.js", "./shopify.d.ts"]
 }

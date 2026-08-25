@@ -1,18 +1,6 @@
-import { useCallback, useEffect, useState } from "react";
-import {
-  reactExtension,
-  useApi,
-  TextField,
-  AdminAction,
-  Button,
-  TextArea,
-  Box,
-  Banner,
-  BlockStack,
-  InlineStack,
-  Text,
-  ProgressIndicator,
-} from "@shopify/ui-extensions-react/admin";
+import "@shopify/ui-extensions/preact";
+import { render } from "preact";
+import { useCallback, useEffect, useState } from "preact/hooks";
 import { getIssues, updateIssues } from "./utils.js";
 
 /**
@@ -37,12 +25,12 @@ function validateForm({ title, description }) {
   };
 }
 
-const TARGET = "admin.product-details.action.render";
+export default async () => {
+  render(<Extension />, document.body);
+};
 
-export default reactExtension(TARGET, () => <App />);
-
-function App() {
-  const { close, data, intents, i18n } = useApi(TARGET);
+function Extension() {
+  const { close, data, intents, i18n } = shopify;
   const issueId = intents?.launchUrl
     ? new URL(intents.launchUrl).searchParams.get("issueId")
     : null;
@@ -89,7 +77,7 @@ function App() {
     setLoadingRecommended(true);
 
     const response = await fetch(
-      `api/recommendedProductIssue?productId=${productId}`,
+      `/api/recommendedProductIssue?productId=${encodeURIComponent(productId)}`,
     );
 
     setLoadingRecommended(false);
@@ -147,70 +135,73 @@ function App() {
     close();
   }, [issue, productId, allIssues, close, isEditing, title, description]);
 
-  if (loading) {
-    return null;
-  }
-
   return (
-    <AdminAction
-      title={
+    <s-admin-action
+      heading={
         isEditing
           ? i18n.translate("edit-issue-heading")
           : i18n.translate("create-issue-heading")
       }
-      primaryAction={
-        <Button onPress={onSubmit}>
-          {isEditing
-            ? i18n.translate("issue-save-button")
-            : i18n.translate("issue-create-button")}
-        </Button>
-      }
-      secondaryAction={
-        <Button onPress={close}>{i18n.translate("issue-cancel-button")}</Button>
-      }
+      loading={loading}
     >
-      <BlockStack>
-        <Banner>
-          <BlockStack>
-            <Text>{i18n.translate("issue-generate-banner-text")}</Text>
-            <InlineStack>
-              <Button
+      <s-stack direction="block" gap="base">
+        <s-banner tone="info">
+          <s-stack direction="block" gap="base">
+            <s-text>{i18n.translate("issue-generate-banner-text")}</s-text>
+            <s-stack direction="inline" gap="base">
+              <s-button
                 disabled={loadingRecommended}
-                onPress={getIssueRecommendation}
+                onClick={getIssueRecommendation}
               >
                 {i18n.translate("issue-generate-button")}
-              </Button>
+              </s-button>
               {loadingRecommended ? (
-                <ProgressIndicator size="small-100" />
+                <s-spinner
+                  accessibilityLabel={i18n.translate("issue-generate-button")}
+                />
               ) : null}
-            </InlineStack>
-          </BlockStack>
-        </Banner>
-      </BlockStack>
-      <TextField
-        value={title}
-        error={
-          formErrors?.title ? i18n.translate("issue-title-error") : undefined
-        }
-        onChange={(val) => setIssue((prev) => ({ ...prev, title: val }))}
-        label={i18n.translate("issue-title-label")}
-        maxLength={50}
-      />
-      <Box paddingBlockStart="large">
-        <TextArea
+            </s-stack>
+          </s-stack>
+        </s-banner>
+        <s-text-field
+          value={title}
+          error={
+            formErrors?.title ? i18n.translate("issue-title-error") : undefined
+          }
+          onChange={(event) => {
+            setIssue((prev) => ({
+              ...prev,
+              title: event.currentTarget.value ?? "",
+            }));
+          }}
+          label={i18n.translate("issue-title-label")}
+          maxLength={50}
+        />
+        <s-text-area
           value={description}
           error={
             formErrors?.description
               ? i18n.translate("issue-description-error")
               : undefined
           }
-          onChange={(val) =>
-            setIssue((prev) => ({ ...prev, description: val }))
-          }
+          onChange={(event) => {
+            setIssue((prev) => ({
+              ...prev,
+              description: event.currentTarget.value ?? "",
+            }));
+          }}
           label={i18n.translate("issue-description-label")}
           maxLength={300}
         />
-      </Box>
-    </AdminAction>
+      </s-stack>
+      <s-button slot="primary-action" onClick={onSubmit}>
+        {isEditing
+          ? i18n.translate("issue-save-button")
+          : i18n.translate("issue-create-button")}
+      </s-button>
+      <s-button slot="secondary-actions" onClick={() => close()}>
+        {i18n.translate("issue-cancel-button")}
+      </s-button>
+    </s-admin-action>
   );
 }

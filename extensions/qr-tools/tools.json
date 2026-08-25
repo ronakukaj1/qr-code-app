@@ -1,0 +1,35 @@
+[
+  {
+    "$schema": "https://extensions.shopifycdn.com/shopifycloud/schemas/v1/tool.json",
+    "name": "search_qr_codes",
+    "description": "Search QR codes by title or product name. Returns scan counts, destinations, and product links.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Optional text to filter QR codes by title or product name"
+        },
+        "first": {
+          "type": "integer",
+          "description": "Max results to return (default 10)"
+        }
+      }
+    }
+  },
+  {
+    "$schema": "https://extensions.shopifycdn.com/shopifycloud/schemas/v1/tool.json",
+    "name": "get_qr_code",
+    "description": "Get details for one QR code by its handle, including scans and linked product",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "handle": {
+          "type": "string",
+          "description": "The QR code handle (slug identifier)"
+        }
+      },
+      "required": ["handle"]
+    }
+  }
+]
