@@ -1,0 +1,12 @@
+{
+  "name": "Create an issue",
+  "create-issue-heading": "Create an issue",
+  "edit-issue-heading": "Edit your issue",
+  "issue-description-label": "Description",
+  "issue-description-error": "Please enter a description",
+  "issue-title-label": "Title",
+  "issue-title-error": "Please enter a title",
+  "issue-create-button": "Create",
+  "issue-cancel-button": "Cancel",
+  "issue-save-button": "Save"
+}

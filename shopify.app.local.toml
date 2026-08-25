@@ -18,6 +18,14 @@ description = "Tracks products created by the Shopify app template for developme
   [product.metafields.app.demo_info.access]
   admin = "merchant_read_write"
 
+[product.metafields.app.issues]
+type = "json"
+name = "Issue Tracker"
+description = "Tracks issues logged for this product"
+
+  [product.metafields.app.issues.access]
+  admin = "merchant_read_write"
+
 [metaobjects.app.qrcode]
 name = "QRCode"
 description = "Stores QR code data for products"

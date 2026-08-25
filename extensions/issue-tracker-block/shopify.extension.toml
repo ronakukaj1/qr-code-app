@@ -1,0 +1,14 @@
+api_version = "2026-04"
+
+[[extensions]]
+name = "t:name"
+handle = "issue-tracker-block"
+uid = "a7f3e821-9c4d-5b2e-8f1a-6d0e4c9b2a71e8f4a2b1c"
+type = "ui_extension"
+
+[[extensions.targeting]]
+module = "./src/BlockExtension.jsx"
+target = "admin.product-details.block.render"
+
+[extensions.capabilities]
+api_access = true

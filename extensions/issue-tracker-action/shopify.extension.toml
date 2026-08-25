@@ -1,0 +1,14 @@
+api_version = "2025-07"
+
+[[extensions]]
+name = "t:name"
+handle = "issue-tracker-action"
+uid = "799a1dec-3979-a563-117b-d4e5cd6b9808fbc17d0d"
+type = "ui_extension"
+
+[[extensions.targeting]]
+module = "./src/ActionExtension.jsx"
+target = "admin.product-details.action.render"
+
+[extensions.capabilities]
+api_access = true

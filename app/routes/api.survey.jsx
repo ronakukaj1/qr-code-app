@@ -1,6 +1,9 @@
 import { authenticate, unauthenticated } from "../shopify.server";
 import { resolveShopDomain } from "../post-purchase.server";
-import { saveSurveyAttribution } from "../survey.server";
+import {
+  normalizeOrderId,
+  saveSurveyAttribution,
+} from "../survey.server";
 
 async function authenticateSurveyRequest(request) {
   const checkoutAuth = await authenticate.public
@@ -36,7 +39,11 @@ export const action = async ({ request }) => {
   try {
     const shop = resolveShopDomain(sessionToken, body);
     const { admin } = await unauthenticated.admin(shop);
-    await saveSurveyAttribution(orderId, attribution, admin);
+    const metafield = await saveSurveyAttribution(orderId, attribution, admin);
+
+    console.log(
+      `[survey] Saved attribution for ${normalizeOrderId(orderId)} on ${shop}: ${metafield?.value}`,
+    );
 
     return cors(Response.json({ ok: true }));
   } catch (error) {

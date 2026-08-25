@@ -13,8 +13,9 @@ function Attribution() {
   const [attribution, setAttribution] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(/** @type {string | null} */ (null));
+  const orderId = shopify.order.value?.id;
   const [attributionSubmitted, setAttributionSubmitted] = useStorageState(
-    "attribution-submitted",
+    orderId ? `attribution-submitted-${orderId}` : "attribution-submitted",
   );
 
   async function handleSubmit() {
@@ -23,7 +24,6 @@ function Attribution() {
       return;
     }
 
-    const orderId = shopify.order.value?.id;
     const shopDomain = shopify.shop.myshopifyDomain;
 
     if (!orderId) {

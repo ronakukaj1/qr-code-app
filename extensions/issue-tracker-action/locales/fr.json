@@ -1,0 +1,12 @@
+{
+  "name": "Créer un problème",
+  "create-issue-heading": "Créer un problème",
+  "edit-issue-heading": "Modifier votre problème",
+  "issue-description-label": "Description",
+  "issue-description-error": "Veuillez entrer une description",
+  "issue-title-label": "Titre",
+  "issue-title-error": "Veuillez entrer un titre",
+  "issue-create-button": "Créer",
+  "issue-cancel-button": "Annuler",
+  "issue-save-button": "Enregistrer"
+}
