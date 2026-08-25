@@ -1,10 +1,12 @@
 {% assign qr_product = block.settings.product | default: product %}
+{% assign raw_product_id = qr_product.id | append: '' %}
+{% assign product_id = raw_product_id | split: '/' | last %}
 
 <div
   class="storefront-qr"
   {{ block.shopify_attributes }}
   data-storefront-qr
-  data-product-id="{{ qr_product.id }}"
+  data-product-id="{{ product_id }}"
   data-proxy-subpath="{{ block.settings.proxy_subpath }}"
   data-empty-message="{{ block.settings.empty_message | escape }}"
   hidden

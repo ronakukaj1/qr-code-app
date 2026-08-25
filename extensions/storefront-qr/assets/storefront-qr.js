@@ -29,7 +29,13 @@
         },
       );
 
-      const result = await response.json();
+      let result;
+
+      try {
+        result = await response.json();
+      } catch {
+        throw new Error("Could not load QR code.");
+      }
 
       if (!response.ok || !result.ok) {
         throw new Error(result.error || "Could not load QR code.");
@@ -49,8 +55,11 @@
       }
 
       block.hidden = false;
-    } catch {
-      showMessage(messageEl, emptyMessage);
+    } catch (error) {
+      showMessage(
+        messageEl,
+        error instanceof Error ? error.message : emptyMessage,
+      );
     }
   });
 

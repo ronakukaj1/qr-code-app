@@ -8,9 +8,9 @@ import {
 import { authenticate } from "../shopify.server";
 import { boundary } from "@shopify/shopify-app-react-router/server";
 
+import { getQRCodeScanUrl } from "../utils/qrCodeUrls.js";
 import {
   getQRCode,
-  getQRCodeScanUrl,
   validateQRCode,
   saveQRCode,
   deleteQRCode,

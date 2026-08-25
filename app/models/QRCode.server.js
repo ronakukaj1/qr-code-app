@@ -4,10 +4,48 @@ import { redirect } from "react-router";
 
 import { withGraphqlRetry } from "../graphql-retry.server";
 import { unauthenticated } from "../shopify.server";
+import { getQRCodeScanUrl } from "../utils/qrCodeUrls.js";
 
 const METAOBJECT_TYPE = "$app:qrcode";
 
+export { getQRCodeScanUrl };
 
+/** @param {unknown} id */
+export function normalizeProductId(id) {
+  if (id == null || id === "") {
+    return null;
+  }
+
+  const str = String(id);
+  const gidMatch = str.match(/Product\/(\d+)$/);
+
+  if (gidMatch) {
+    return gidMatch[1];
+  }
+
+  if (/^\d+$/.test(str)) {
+    return str;
+  }
+
+  return null;
+}
+
+/** @param {unknown} stored @param {unknown} requested */
+function productIdsMatch(stored, requested) {
+  const storedId = normalizeProductId(stored);
+  const requestedId = normalizeProductId(requested);
+
+  return Boolean(storedId && requestedId && storedId === requestedId);
+}
+
+/** @param {{ jsonValue?: unknown; reference?: { id?: unknown } } | null | undefined} productField */
+function getStoredProductId(productField) {
+  if (!productField) {
+    return null;
+  }
+
+  return productField.jsonValue ?? productField.reference?.id ?? null;
+}
 
 export async function getQRCode(handle, graphql, shop) {
     const response = await withGraphqlRetry(
@@ -126,11 +164,9 @@ export async function getQRCodes (graphql, shop){
 }
 
 export async function getQRCodeByProductId(productId, graphql, shop) {
-  const productGid = String(productId).startsWith("gid://")
-    ? String(productId)
-    : `gid://shopify/Product/${productId}`;
-
-  const response = await graphql(
+  const response = await withGraphqlRetry(
+    () =>
+      graphql(
     `
       query GetQRCodesForProduct($type: String!) {
         metaobjects(type: $type, first: 50, sortKey: "updated_at", reverse: true) {
@@ -166,17 +202,19 @@ export async function getQRCodeByProductId(productId, graphql, shop) {
         }
       }
     `,
-    {
-      variables: {
-        type: METAOBJECT_TYPE,
-      },
-    },
+        {
+          variables: {
+            type: METAOBJECT_TYPE,
+          },
+        },
+      ),
+    { label: "getQRCodeByProductId" },
   );
 
   const { data } = await response.json();
   const metaobjects = data?.metaobjects?.nodes ?? [];
-  const metaobject = metaobjects.find(
-    (node) => node.product?.jsonValue === productGid,
+  const metaobject = metaobjects.find((node) =>
+    productIdsMatch(getStoredProductId(node.product), productId),
   );
 
   if (!metaobject) {
@@ -216,10 +254,6 @@ async function transformMetaobject(metaobject, shop){
 
       export async function getQRCodeImage(handle, shop) {
         return QRCode.toDataURL(getQRCodeScanUrl(handle, shop));
-      }
-
-      export function getQRCodeScanUrl(handle, shop) {
-        return `https://${shop}/apps/qr-scan/${handle}`;
       }
 
       export async function processQRCodeScan(shop, handle) {
