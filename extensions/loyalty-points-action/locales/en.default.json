@@ -1,0 +1,8 @@
+{
+  "name": "Reward customers with loyalty points!",
+  "description": "Reward customers belonging to the {{ segment }} segment the following points:",
+  "unnamedSegment": "this",
+  "label": "Loyalty points",
+  "close": "Close",
+  "done": "Done"
+}

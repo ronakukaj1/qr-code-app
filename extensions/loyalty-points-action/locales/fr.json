@@ -1,0 +1,8 @@
+{
+  "name": "Récompensez vos clients avec des points de fidélité!",
+  "description": "Récompensez les clients du segment {{ segment }} avec les points suivants :",
+  "unnamedSegment": "ce",
+  "label": "Points de fidélité",
+  "close": "Fermer",
+  "done": "Terminé"
+}

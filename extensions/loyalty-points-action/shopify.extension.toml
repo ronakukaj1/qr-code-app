@@ -1,0 +1,14 @@
+api_version = "2026-04"
+
+[[extensions]]
+name = "t:name"
+handle = "loyalty-points-action"
+type = "ui_extension"
+uid = "d7ceba23-fed5-03fe-acb2-69aaa0da8ed0821ba3ae"
+
+[[extensions.targeting]]
+module = "./src/ActionExtension.jsx"
+target = "admin.customer-segment-details.action.render"
+
+[extensions.capabilities]
+api_access = true
