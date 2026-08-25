@@ -8,5 +8,7 @@
   "issue-title-error": "Please enter a title",
   "issue-create-button": "Create",
   "issue-cancel-button": "Cancel",
-  "issue-save-button": "Save"
+  "issue-save-button": "Save",
+  "issue-generate-button": "Generate issue",
+  "issue-generate-banner-text": "Automatically fill the issue based on past customer feedback"
 }

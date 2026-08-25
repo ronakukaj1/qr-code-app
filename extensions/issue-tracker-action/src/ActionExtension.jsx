@@ -7,6 +7,11 @@ import {
   Button,
   TextArea,
   Box,
+  Banner,
+  BlockStack,
+  InlineStack,
+  Text,
+  ProgressIndicator,
 } from "@shopify/ui-extensions-react/admin";
 import { getIssues, updateIssues } from "./utils.js";
 
@@ -42,6 +47,7 @@ function App() {
     ? new URL(intents.launchUrl).searchParams.get("issueId")
     : null;
   const [loading, setLoading] = useState(Boolean(issueId));
+  const [loadingRecommended, setLoadingRecommended] = useState(false);
   const [issue, setIssue] = useState(
     /** @type {IssueForm} */ ({ title: "", description: "", id: issueId }),
   );
@@ -74,6 +80,35 @@ function App() {
       setIssue(editingIssue);
     }
   }, [issueId, allIssues]);
+
+  const getIssueRecommendation = useCallback(async () => {
+    if (!productId) {
+      return;
+    }
+
+    setLoadingRecommended(true);
+
+    const response = await fetch(
+      `api/recommendedProductIssue?productId=${productId}`,
+    );
+
+    setLoadingRecommended(false);
+
+    if (!response.ok) {
+      console.error("[issue-tracker-action] Failed to fetch recommendation");
+      return;
+    }
+
+    const json = await response.json();
+
+    if (json?.productIssue) {
+      setIssue((prev) => ({
+        ...prev,
+        title: json.productIssue.title,
+        description: json.productIssue.description,
+      }));
+    }
+  }, [productId]);
 
   const onSubmit = useCallback(async () => {
     const { isValid, errors } = validateForm(issue);
@@ -134,6 +169,24 @@ function App() {
         <Button onPress={close}>{i18n.translate("issue-cancel-button")}</Button>
       }
     >
+      <BlockStack>
+        <Banner>
+          <BlockStack>
+            <Text>{i18n.translate("issue-generate-banner-text")}</Text>
+            <InlineStack>
+              <Button
+                disabled={loadingRecommended}
+                onPress={getIssueRecommendation}
+              >
+                {i18n.translate("issue-generate-button")}
+              </Button>
+              {loadingRecommended ? (
+                <ProgressIndicator size="small-100" />
+              ) : null}
+            </InlineStack>
+          </BlockStack>
+        </Banner>
+      </BlockStack>
       <TextField
         value={title}
         error={
