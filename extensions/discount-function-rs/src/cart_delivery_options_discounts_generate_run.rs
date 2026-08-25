@@ -2,26 +2,40 @@ use super::schema;
 use shopify_function::prelude::*;
 use shopify_function::Result;
 
+#[derive(Deserialize)]
+#[shopify_function(rename_all = "camelCase")]
+pub struct DiscountConfiguration {
+    delivery_percentage: f64,
+}
+
 #[shopify_function]
 fn cart_delivery_options_discounts_generate_run(
     input: schema::cart_delivery_options_discounts_generate_run::Input,
 ) -> Result<schema::CartDeliveryOptionsDiscountsGenerateRunResult> {
-    let has_shipping_discount_class = input
-        .discount()
-        .discount_classes()
-        .contains(&schema::DiscountClass::Shipping);
-    if !has_shipping_discount_class {
-        return Ok(schema::CartDeliveryOptionsDiscountsGenerateRunResult { operations: vec![] });
-    }
-
     let first_delivery_group = input
         .cart()
         .delivery_groups()
         .first()
         .ok_or("No delivery groups found")?;
 
-    Ok(schema::CartDeliveryOptionsDiscountsGenerateRunResult {
-        operations: vec![schema::DeliveryOperation::DeliveryDiscountsAdd(
+    let discount_configuration = match input.discount().metafield() {
+        Some(metafield) => metafield.json_value(),
+        None => return Err("No metafield provided".into()),
+    };
+
+    let has_shipping_discount_class = input
+        .discount()
+        .discount_classes()
+        .contains(&schema::DiscountClass::Shipping);
+
+    if !has_shipping_discount_class {
+        return Ok(schema::CartDeliveryOptionsDiscountsGenerateRunResult { operations: vec![] });
+    }
+
+    let mut operations = vec![];
+
+    if discount_configuration.delivery_percentage > 0.0 {
+        operations.push(schema::DeliveryOperation::DeliveryDiscountsAdd(
             schema::DeliveryDiscountsAddOperation {
                 selection_strategy: schema::DeliveryDiscountSelectionStrategy::All,
                 candidates: vec![schema::DeliveryDiscountCandidate {
@@ -31,12 +45,17 @@ fn cart_delivery_options_discounts_generate_run(
                         },
                     )],
                     value: schema::DeliveryDiscountCandidateValue::Percentage(schema::Percentage {
-                        value: Decimal(100.0),
+                        value: Decimal(discount_configuration.delivery_percentage),
                     }),
-                    message: Some("FREE DELIVERY".to_string()),
+                    message: Some(format!(
+                        "{}% OFF DELIVERY",
+                        discount_configuration.delivery_percentage
+                    )),
                     associated_discount_code: None,
                 }],
             },
-        )],
-    })
+        ));
+    }
+
+    Ok(schema::CartDeliveryOptionsDiscountsGenerateRunResult { operations })
 }

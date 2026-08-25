@@ -2,22 +2,22 @@ use super::schema;
 use shopify_function::prelude::*;
 use shopify_function::Result;
 
+#[derive(Deserialize)]
+#[shopify_function(rename_all = "camelCase")]
+pub struct DiscountConfiguration {
+    cart_line_percentage: f64,
+    order_percentage: f64,
+    collection_ids: Vec<String>,
+}
+
 #[shopify_function]
 fn cart_lines_discounts_generate_run(
     input: schema::cart_lines_discounts_generate_run::Input,
 ) -> Result<schema::CartLinesDiscountsGenerateRunResult> {
-    let max_cart_line = input
-        .cart()
-        .lines()
-        .iter()
-        .max_by(|a, b| {
-            a.cost()
-                .subtotal_amount()
-                .amount()
-                .partial_cmp(b.cost().subtotal_amount().amount())
-                .unwrap_or(std::cmp::Ordering::Equal)
-        })
-        .ok_or("No cart lines found")?;
+    let config = match input.discount().metafield() {
+        Some(metafield) => metafield.json_value(),
+        None => return Err("No metafield provided".into()),
+    };
 
     let has_order_discount_class = input
         .discount()
@@ -34,8 +34,45 @@ fn cart_lines_discounts_generate_run(
 
     let mut operations = vec![];
 
-    // Check if the discount has the ORDER class
-    if has_order_discount_class {
+    if has_product_discount_class && config.cart_line_percentage > 0.0 {
+        let mut cart_line_targets = vec![];
+        for line in input.cart().lines() {
+            if let schema::cart_lines_discounts_generate_run::input::cart::lines::Merchandise::ProductVariant(
+                variant,
+            ) = line.merchandise()
+            {
+                if *variant.product().in_any_collection() || config.collection_ids.is_empty() {
+                    cart_line_targets.push(schema::ProductDiscountCandidateTarget::CartLine(
+                        schema::CartLineTarget {
+                            id: line.id().clone(),
+                            quantity: None,
+                        },
+                    ));
+                }
+            }
+        }
+
+        if !cart_line_targets.is_empty() {
+            operations.push(schema::CartOperation::ProductDiscountsAdd(
+                schema::ProductDiscountsAddOperation {
+                    selection_strategy: schema::ProductDiscountSelectionStrategy::First,
+                    candidates: vec![schema::ProductDiscountCandidate {
+                        targets: cart_line_targets,
+                        message: Some(format!("{}% OFF PRODUCT", config.cart_line_percentage)),
+                        value: schema::ProductDiscountCandidateValue::Percentage(
+                            schema::Percentage {
+                                value: Decimal(config.cart_line_percentage),
+                            },
+                        ),
+                        associated_discount_code: None,
+                        prerequisites: None,
+                    }],
+                },
+            ));
+        }
+    }
+
+    if has_order_discount_class && config.order_percentage > 0.0 {
         operations.push(schema::CartOperation::OrderDiscountsAdd(
             schema::OrderDiscountsAddOperation {
                 selection_strategy: schema::OrderDiscountSelectionStrategy::First,
@@ -45,35 +82,12 @@ fn cart_lines_discounts_generate_run(
                             excluded_cart_line_ids: vec![],
                         },
                     )],
-                    message: Some("10% OFF ORDER".to_string()),
+                    message: Some(format!("{}% OFF ORDER", config.order_percentage)),
                     value: schema::OrderDiscountCandidateValue::Percentage(schema::Percentage {
-                        value: Decimal(10.0),
+                        value: Decimal(config.order_percentage),
                     }),
                     conditions: None,
                     associated_discount_code: None,
-                }],
-            },
-        ));
-    }
-
-    // Check if the discount has the PRODUCT class
-    if has_product_discount_class {
-        operations.push(schema::CartOperation::ProductDiscountsAdd(
-            schema::ProductDiscountsAddOperation {
-                selection_strategy: schema::ProductDiscountSelectionStrategy::First,
-                candidates: vec![schema::ProductDiscountCandidate {
-                    targets: vec![schema::ProductDiscountCandidateTarget::CartLine(
-                        schema::CartLineTarget {
-                            id: max_cart_line.id().clone(),
-                            quantity: None,
-                        },
-                    )],
-                    message: Some("20% OFF PRODUCT".to_string()),
-                    value: schema::ProductDiscountCandidateValue::Percentage(schema::Percentage {
-                        value: Decimal(20.0),
-                    }),
-                    associated_discount_code: None,
-                    prerequisites: None,
                 }],
             },
         ));

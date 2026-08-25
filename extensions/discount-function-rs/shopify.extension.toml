@@ -22,3 +22,10 @@ description = "t:description"
   command = "bash build.sh"
   path = "target/wasm32-unknown-unknown/release/discount-function-rs.wasm"
   watch = [ "src/**/*.rs" ]
+
+[extensions.input.variables]
+namespace = "$app"
+key = "function-configuration"
+
+[extensions.ui]
+handle = "discount-ui-rs"

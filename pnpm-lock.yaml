@@ -235,6 +235,18 @@ importers:
         specifier: ^3.2.4
         version: 3.2.7(@types/node@22.20.1)(jiti@2.7.0)(supports-color@7.2.0)(yaml@2.9.0)
 
+  extensions/discount-ui-rs:
+    dependencies:
+      '@preact/signals':
+        specifier: ^2.3.x
+        version: 2.11.0(preact@10.29.8)
+      '@shopify/ui-extensions':
+        specifier: ~2026.01.0
+        version: 2026.1.5(@preact/signals@2.11.0(preact@10.29.8))(preact@10.29.8)
+      preact:
+        specifier: ^10.10.x
+        version: 10.29.8
+
   extensions/issue-tracker-action:
     dependencies:
       '@shopify/ui-extensions':
@@ -1630,6 +1642,17 @@ packages:
 
   '@shopify/ui-extensions@2025.10.16':
     resolution: {integrity: sha512-w8Lr8NbAILhtqWmeKH/9osFWBsB+G0ksWho/V3cruhK/t0GcdQA6GANKokFPTsmD9sszqlrrO+URbs5I/vHxiQ==}
+    peerDependencies:
+      '@preact/signals': '*'
+      preact: '*'
+    peerDependenciesMeta:
+      '@preact/signals':
+        optional: true
+      preact:
+        optional: true
+
+  '@shopify/ui-extensions@2026.1.5':
+    resolution: {integrity: sha512-vDWYOtEcMT/Jm4s8Fe8iZVoRiLNwG5DbC0kqfrFRTcPD2D6mvkL+e3MYc4LfrTV4dPCCqBjSvfMpa8fK33fDFA==}
     peerDependencies:
       '@preact/signals': '*'
       preact: '*'
@@ -6141,6 +6164,13 @@ snapshots:
       - react-reconciler
 
   '@shopify/ui-extensions@2025.10.16(@preact/signals@2.11.0(preact@10.29.8))(preact@10.29.8)':
+    dependencies:
+      ts-morph: 25.0.1
+    optionalDependencies:
+      '@preact/signals': 2.11.0(preact@10.29.8)
+      preact: 10.29.8
+
+  '@shopify/ui-extensions@2026.1.5(@preact/signals@2.11.0(preact@10.29.8))(preact@10.29.8)':
     dependencies:
       ts-morph: 25.0.1
     optionalDependencies:

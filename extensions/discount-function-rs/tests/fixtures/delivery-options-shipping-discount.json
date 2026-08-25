@@ -4,13 +4,18 @@
     "target": "cart.delivery-options.discounts.generate.run",
     "input": {
       "discount": {
-        "discountClasses": ["SHIPPING"]
+        "discountClasses": ["SHIPPING"],
+        "metafield": {
+          "jsonValue": {
+            "deliveryPercentage": 100
+          }
+        }
       },
       "cart": {
         "deliveryGroups": [
-           {
-             "id": "gid://shopify/CartDeliveryGroup/1"
-           }
+          {
+            "id": "gid://shopify/CartDeliveryGroup/1"
+          }
         ]
       }
     },
@@ -20,7 +25,7 @@
           "deliveryDiscountsAdd": {
             "candidates": [
               {
-                "message": "FREE DELIVERY",
+                "message": "100% OFF DELIVERY",
                 "targets": [
                   {
                     "deliveryGroup": {
