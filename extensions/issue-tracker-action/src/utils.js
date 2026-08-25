@@ -99,3 +99,21 @@ export async function updateIssues(productId, newIssues) {
 
   return result;
 }
+
+/** @param {string} productId */
+export async function getVariantsCount(productId) {
+  const result = await makeGraphQLQuery(
+    `#graphql
+      query ProductVariantsCount($id: ID!) {
+        product(id: $id) {
+          variantsCount {
+            count
+          }
+        }
+      }
+    `,
+    { id: productId },
+  );
+
+  return result?.data?.product?.variantsCount?.count ?? 0;
+}

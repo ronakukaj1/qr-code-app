@@ -1,4 +1,4 @@
-api_version = "2025-07"
+api_version = "2026-04"
 
 [[extensions]]
 name = "t:name"
@@ -9,6 +9,9 @@ type = "ui_extension"
 [[extensions.targeting]]
 module = "./src/ActionExtension.jsx"
 target = "admin.product-details.action.render"
+
+[extensions.targeting.should_render]
+module = "./src/condition/shouldRender.js"
 
 [extensions.capabilities]
 api_access = true
