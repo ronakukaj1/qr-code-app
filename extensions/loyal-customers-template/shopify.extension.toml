@@ -1,0 +1,12 @@
+api_version = "2025-10"
+
+[[extensions]]
+name = "t:title"
+handle = "loyal-customers-template"
+type = "ui_extension"
+uid = "aa7cb94a-1a39-8d95-3fee-aa4d9ff3dd3ad9283ef1"
+description = "t:description"
+
+[[extensions.targeting]]
+module = "./src/CustomerSegmentTemplateData.js"
+target = "admin.customers.segmentation-templates.data"
