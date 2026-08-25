@@ -1,0 +1,14 @@
+api_version = "2026-04"
+
+[[extensions]]
+name = "t:name"
+handle = "admin-print"
+uid = "1c27ccfb-ebb2-96df-ec26-be0238fc10e2d8f8d8ec"
+type = "ui_extension"
+
+[[extensions.targeting]]
+module = "./src/PrintActionExtension.jsx"
+target = "admin.order-details.print-action.render"
+
+[extensions.capabilities]
+network_access = true
