@@ -13,5 +13,6 @@
     "strict": false,
     "noImplicitAny": false
   },
-  "include": ["./src/**/*.jsx", "./src/**/*.js", "./shopify.d.ts"]
+  "include": ["./src/**/*.jsx", "./src/**/*.js", "./shopify.d.ts"],
+  "exclude": ["./dist/**"]
 }

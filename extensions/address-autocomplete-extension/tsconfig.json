@@ -10,5 +10,6 @@
     "noEmit": true,
     "skipLibCheck": true
   },
-  "include": ["./src", "./shopify.d.ts"]
+  "include": ["./src", "./shopify.d.ts"],
+  "exclude": ["./dist/**"]
 }

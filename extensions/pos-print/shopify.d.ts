@@ -9,5 +9,6 @@ declare module './src/PrintTile.jsx' {
 //@ts-ignore
 declare module './src/PrintModal.jsx' {
   const shopify: import('@shopify/ui-extensions/pos.home.modal.render').Api;
-  const globalThis: { shopify: typeof shopify };
+  const navigation: import('@shopify/ui-extensions/point-of-sale').Navigation;
+  const globalThis: { shopify: typeof shopify; navigation: typeof navigation };
 }

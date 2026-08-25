@@ -44,9 +44,10 @@ function Extension() {
   const [documents, setDocuments] = useState(INITIAL_DOCUMENTS);
 
   const url = navigation.currentEntry.url;
+  /** @type {{ selectedIds?: string[] } | undefined} */
   const state = navigation.currentEntry.getState();
 
-  /** @param {Event} event */
+  /** @param {any} event */
   const handleSelectionChange = (event) => {
     const selectedIds = /** @type {any} */ (event.currentTarget).values ?? [];
     setDocuments((prevDocs) =>

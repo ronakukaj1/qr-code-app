@@ -1,15 +1,15 @@
 {
   "compilerOptions": {
     "jsx": "react-jsx",
-    "jsxImportSource": "preact",
     "target": "ES2020",
-    "checkJs": true,
     "allowJs": true,
+    "checkJs": false,
+    "module": "ESNext",
     "moduleResolution": "bundler",
     "esModuleInterop": true,
     "noEmit": true,
     "skipLibCheck": true
   },
-  "include": ["./src/**/*.jsx", "./src/**/*.js", "./shopify.d.ts"],
-  "exclude": ["./dist/**"]
+  "include": ["./src/**/*.jsx", "./src/**/*.js"],
+  "exclude": ["./dist/**", "./node_modules/**"]
 }
