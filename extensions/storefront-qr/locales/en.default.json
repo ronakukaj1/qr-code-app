@@ -1,5 +1,8 @@
 {
   "product_qr": {
     "name": "Product QR code"
+  },
+  "product_wishlist": {
+    "name": "Add to wishlist"
   }
 }

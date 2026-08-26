@@ -1,0 +1,71 @@
+{% assign wishlist_product = block.settings.product | default: product %}
+{% assign raw_product_id = wishlist_product.id | append: '' %}
+{% assign product_id = raw_product_id | split: '/' | last %}
+
+<div
+  class="storefront-wishlist"
+  {{ block.shopify_attributes }}
+  data-storefront-wishlist
+  data-product-id="{{ product_id }}"
+  data-proxy-subpath="{{ block.settings.proxy_subpath }}"
+  data-logged-in="{% if customer %}true{% else %}false{% endif %}"
+  data-login-message="{{ block.settings.login_message | escape }}"
+  data-added-message="{{ block.settings.added_message | escape }}"
+  data-button-label="{{ block.settings.button_label | escape }}"
+  data-added-label="{{ block.settings.added_label | escape }}"
+>
+  <button class="storefront-wishlist__button" type="button" data-wishlist-button>
+    {{ block.settings.button_label }}
+  </button>
+  <p class="storefront-wishlist__message" data-wishlist-message hidden></p>
+</div>
+
+<link rel="stylesheet" href="{{ 'storefront-wishlist.css' | asset_url }}">
+<script src="{{ 'storefront-wishlist.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "Add to wishlist",
+  "target": "section",
+  "templates": ["product"],
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Product",
+      "autofill": true
+    },
+    {
+      "type": "text",
+      "id": "proxy_subpath",
+      "label": "App proxy subpath",
+      "default": "qr-scan",
+      "info": "Must match the app proxy subpath in shopify.app.toml."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Add to wishlist"
+    },
+    {
+      "type": "text",
+      "id": "login_message",
+      "label": "Login required message",
+      "default": "Log in to save items to your wishlist."
+    },
+    {
+      "type": "text",
+      "id": "added_message",
+      "label": "Added confirmation message",
+      "default": "Added to your wishlist."
+    },
+    {
+      "type": "text",
+      "id": "added_label",
+      "label": "Added button label",
+      "default": "In wishlist"
+    }
+  ]
+}
+{% endschema %}

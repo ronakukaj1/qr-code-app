@@ -1,0 +1,17 @@
+# Learn more about configuring your Customer account UI extension:
+# https://shopify.dev/api/customer-account-ui-extensions/unstable/configuration
+
+api_version = "2026-07"
+
+[[extensions]]
+name = "Wishlist profile block"
+handle = "wishlist-profile-block"
+type = "ui_extension"
+uid = "a1eb23c4-ce29-1e17-8061-132bf7a545b9d9bca54d"
+
+[[extensions.targeting]]
+module = "./src/ProfileBlockExtension.jsx"
+target = "customer-account.profile.block.render"
+
+[extensions.capabilities]
+api_access = true

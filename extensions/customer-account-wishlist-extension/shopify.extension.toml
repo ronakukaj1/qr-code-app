@@ -1,0 +1,21 @@
+# Learn more about configuring your Customer account UI extension:
+# https://shopify.dev/api/customer-account-ui-extensions/unstable/configuration
+
+api_version = "2026-07"
+
+[[extensions]]
+name = "My wishlist"
+handle = "customer-account-wishlist-extension"
+type = "ui_extension"
+uid = "3a495b4c-7432-f824-50b6-44ec8381c25e7d2a5779"
+
+[[extensions.targeting]]
+module = "./src/FullPageExtension.jsx"
+target = "customer-account.page.render"
+
+[extensions.capabilities]
+api_access = true
+
+[[extensions.metafields]]
+namespace = "$app"
+key = "wishlist"

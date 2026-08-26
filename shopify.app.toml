@@ -7,7 +7,7 @@ name = "QRCode-rona"
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
-scopes = "write_products,read_products,read_customers,write_customers,customer_read_customers,customer_read_orders,customer_write_orders,write_metaobjects,write_metaobject_definitions,read_orders,write_orders,read_draft_orders,write_app_proxy,write_discounts,write_payment_customizations,write_delivery_customizations,write_cart_transforms"
+scopes = "write_products,read_products,read_customers,write_customers,customer_read_customers,customer_write_customers,customer_read_orders,customer_write_orders,write_metaobjects,write_metaobject_definitions,read_orders,write_orders,read_draft_orders,write_app_proxy,write_discounts,write_payment_customizations,write_delivery_customizations,write_cart_transforms"
 
 [product.metafields.app.demo_info]
 type = "single_line_text_field"
@@ -124,6 +124,15 @@ description = "Customer loyalty points earned through segment-based rewards"
   [customer.metafields.app.points.access]
   admin = "merchant_read_write"
   customer_account = "read"
+
+[customer.metafields.app.wishlist]
+name = "Wishlist"
+type = "json"
+description = "Product IDs saved to the customer's wishlist"
+
+  [customer.metafields.app.wishlist.access]
+  admin = "merchant_read_write"
+  customer_account = "read_write"
 
 [discount.metafields.app.function-configuration]
 type = "json"
