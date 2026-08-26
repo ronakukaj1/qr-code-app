@@ -8,7 +8,7 @@ embedded = true
 name = "QRCode-rona"
 
 [access_scopes]
-scopes = "write_products,read_products,read_customers,write_customers,customer_read_customers,write_metaobjects,write_metaobject_definitions,read_orders,write_orders,read_draft_orders,write_app_proxy"
+scopes = "write_products,read_products,read_customers,write_customers,customer_read_customers,customer_read_orders,customer_write_orders,write_metaobjects,write_metaobject_definitions,read_orders,write_orders,read_draft_orders,write_app_proxy"
 
 [product.metafields.app.demo_info]
 type = "single_line_text_field"
@@ -72,6 +72,15 @@ type = "single_line_text_field"
 
   [order.metafields.app.surveyAttribution.access]
   admin = "merchant_read_write"
+
+[order.metafields.app.reportedProblem]
+name = "Reported problem"
+type = "single_line_text_field"
+description = "Problem reported by the customer from the order action menu"
+
+  [order.metafields.app.reportedProblem.access]
+  admin = "merchant_read_write"
+  customer_account = "read_write"
 
 [customer.metafields.app.points]
 type = "number_integer"
