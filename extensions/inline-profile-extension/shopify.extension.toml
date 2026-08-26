@@ -1,0 +1,17 @@
+# Learn more about configuring your Customer account UI extension:
+# https://shopify.dev/api/customer-account-ui-extensions/unstable/configuration
+
+api_version = "2026-07"
+
+[[extensions]]
+name = "inline-profile-extension"
+handle = "inline-profile-extension"
+type = "ui_extension"
+uid = "a4f8c2e1-9d3b-4a7f-b6e2-1c8d5f0a3b7e9d2c4f6a8"
+
+[[extensions.targeting]]
+module = "./src/ProfileBlockExtension.jsx"
+target = "customer-account.profile.block.render"
+
+[extensions.capabilities]
+api_access = true
