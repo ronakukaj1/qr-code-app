@@ -1,5 +1,5 @@
 {
-  "name": "order-action-customer-extension",
+  "name": "pre-auth-order-note-extension",
   "private": true,
   "version": "1.0.0",
   "license": "UNLICENSED",

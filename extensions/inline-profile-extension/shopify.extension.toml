@@ -15,3 +15,7 @@ target = "customer-account.profile.block.render"
 
 [extensions.capabilities]
 api_access = true
+
+[[extensions.metafields]]
+namespace = "$app"
+key = "points"

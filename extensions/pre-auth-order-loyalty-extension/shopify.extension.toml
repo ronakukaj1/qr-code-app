@@ -1,0 +1,19 @@
+api_version = "2026-07"
+
+[[extensions]]
+name = "Pre-auth order loyalty"
+handle = "pre-auth-order-loyalty-extension"
+type = "ui_extension"
+uid = "c7d8e9f0-a1b2-4c3d-8e5f-6a7b8c9d0e1f2a3b4"
+
+[[extensions.targeting]]
+module = "./src/BlockLoyaltyExtension.jsx"
+target = "customer-account.order-status.block.render"
+
+[[extensions.metafields]]
+namespace = "$app"
+key = "points"
+
+[[extensions.metafields]]
+namespace = "$app"
+key = "loyaltyPointsAwarded"

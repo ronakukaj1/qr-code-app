@@ -82,6 +82,24 @@ description = "Problem reported by the customer from the order action menu"
   admin = "merchant_read_write"
   customer_account = "read_write"
 
+[order.metafields.app.orderNote]
+name = "Order note"
+type = "multi_line_text_field"
+description = "Note added by the customer from the order action menu"
+
+  [order.metafields.app.orderNote.access]
+  admin = "merchant_read_write"
+  customer_account = "read_write"
+
+[order.metafields.app.loyaltyPointsAwarded]
+name = "Loyalty points awarded"
+type = "number_integer"
+description = "Loyalty points credited to the customer for this order"
+
+  [order.metafields.app.loyaltyPointsAwarded.access]
+  admin = "merchant_read_write"
+  customer_account = "read_write"
+
 [customer.metafields.app.points]
 type = "number_integer"
 name = "Loyalty Points"
@@ -89,7 +107,7 @@ description = "Customer loyalty points earned through segment-based rewards"
 
   [customer.metafields.app.points.access]
   admin = "merchant_read_write"
-  customer_account = "read"
+  customer_account = "read_write"
 
 [customer.metafields.app.wishlist]
 name = "Wishlist"

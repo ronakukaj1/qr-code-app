@@ -11,6 +11,6 @@
     "noEmit": true,
     "skipLibCheck": true
   },
-  "include": ["./src/**/*.jsx", "./src/**/*.js", "./shopify.d.ts"],
+  "include": ["./src/**/*.jsx", "./shopify.d.ts"],
   "exclude": ["./dist/**"]
 }
