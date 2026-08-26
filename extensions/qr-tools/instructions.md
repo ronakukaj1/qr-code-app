@@ -1,18 +1,21 @@
-## When to Use This App's Tools
+## When to Use QR Code Tools
 
 Use these tools when the merchant asks about:
+- QR codes for products
+- Scan counts or QR code performance
+- Which products have QR codes
+- QR code destinations (product page, checkout, etc.)
 
-- Data or records from apps
+## Guidelines
 
-## Important Guidelines
+- "QR code" and "QR" mean the same thing in this app
+- Each QR code is linked to one product and variant
+- Scan count is stored on the QR code metaobject
+- When comparing performance, use `_meta.scans`
+- If the merchant wants to edit a QR code, link them to the QR code in the app
 
-- Use the `query` parameter to pass the merchant's search terms
-- Results are paginated - use `first` and `after` parameters for large result sets
+## Common Questions
 
-## Common Workflows
-
-### Searching for Data
-
-1. Understand what the merchant is looking for
-2. Use the search tool with their query
-3. Present the results with relevant details (title, type, URL if available)
+- "Which QR codes have the most scans?" → search_qr_codes, sort by scans in _meta
+- "Does product X have a QR code?" → search_qr_codes with query = product name
+- "How many scans on [title]?" → get_qr_code with the handle
